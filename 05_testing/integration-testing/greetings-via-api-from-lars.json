@@ -1,0 +1,17 @@
+{
+  "__COMMENT__": "lots of API Gateway specific stuff, like",
+
+  "resource": "/",
+  "path": "/",
+  "httpMethod": "GET",
+  "requestContext": {
+    "resourcePath": "/",
+    "httpMethod": "GET",
+    "path": "/greetings/"
+  },
+
+  "__COMMENT__": "... and lots of API Gateway specific stuff, like",
+  "__COMMENT__": "BUT finally our payload of interest (aka body)",
+
+  "body": "{\"firstName\":\"Lars\" , \"lastName\":\"Roewekamp\"}"
+}

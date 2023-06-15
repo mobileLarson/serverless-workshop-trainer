@@ -1,0 +1,16 @@
+{
+  "Entries": [
+    {
+      "Detail": {
+        "Message": "Thank you for 'submitting an order'. The workflow resumes as soon as a barista finish your drink.",
+        "TaskToken.$": "$$.Task.Token",
+        "orderId.$": "$.orderToCreate.orderId",
+        "userId.$": "$.orderToCreate.userId",
+        "drink.$": "$.orderToCreate.drink"
+      },
+      "DetailType": "OrderProcessor.WaitingCompletion",
+      "EventBusName": "sw-event-bus",
+      "Source": "ok.serverlessworkshop"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "orderCompleted": {
+    "displayMessage.$": "States.Format('Order with id {} is ready for pick up.',$.orderToCreate.orderId)",
+    "orderCreated": {
+      "orderId.$": "$.orderToCreate.orderId",
+      "orderStatus": "ready for pickup",
+      "userId.$": "$.orderToCreate.userId",
+      "drink.$": "$.orderToCreate.drink",
+      "baristaId.$": "$.orderToCreate.barista.baristaId"
+    }
+  }
+}

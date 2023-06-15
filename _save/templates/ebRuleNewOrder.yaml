@@ -1,0 +1,21 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: CloudFormation template for EventBridge rule 'NewOrder'
+Resources:
+  EventRule0:
+    Type: AWS::Events::Rule
+    Properties:
+      Description: new order arrived
+      EventBusName: sw-event-bus
+      EventPattern:
+        detail-type:
+          - OrderManagementService.NewOrder
+        source:
+          - ok.serverlessworkshop
+      Name: NewOrder
+      State: ENABLED
+      Targets:
+        - Id: Id2edad396-3f05-47ce-b17a-a3436fb067fa
+          Arn: >-
+            arn:aws:states:eu-central-1:460357271599:stateMachine:sw-order-processor-workflow
+          RoleArn: >-
+            arn:aws:iam::460357271599:role/service-role/Amazon_EventBridge_Invoke_Step_Functions_2005241807

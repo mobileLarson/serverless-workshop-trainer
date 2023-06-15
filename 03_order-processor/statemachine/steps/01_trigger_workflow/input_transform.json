@@ -1,0 +1,9 @@
+{
+  "displayMessage.$": "States.Format('Order with id {} entered workflow.',$.detail.orderId)",
+  "orderToCreate": {
+    "state": "received",
+    "orderId.$": "$.detail.orderId",
+    "userId.$": "$.detail.userId",
+    "drink.$": "$.detail.drink"
+  }
+}

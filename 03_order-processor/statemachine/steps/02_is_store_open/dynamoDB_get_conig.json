@@ -1,0 +1,8 @@
+{
+  "TableName": "sw-config-table",
+  "Key": {
+    "PK": {
+      "S": "config"
+    }
+  }
+}

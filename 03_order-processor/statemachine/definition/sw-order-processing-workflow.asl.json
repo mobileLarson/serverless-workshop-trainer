@@ -1,0 +1,151 @@
+{
+  "Comment": "Order Processing Workflow",
+  "StartAt": "Order created",
+  "States": {
+    "Order created": {
+      "Type": "Pass",
+      "Parameters": {
+        "displayMessage.$": "States.Format('Order with id {} entered workflow.',$.detail.orderId)",
+        "orderToCreate": {
+          "state": "received",
+          "orderId.$": "$.detail.orderId",
+          "userId.$": "$.detail.userId",
+          "drink.$": "$.detail.drink"
+        }
+      },
+      "Next": "Get \"store open\" info"
+    },
+    "Get \"store open\" info": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::dynamodb:getItem",
+      "Parameters": {
+        "TableName": "sw-config-table",
+        "Key": {
+          "PK": {
+            "S": "config"
+          }
+        }
+      },
+      "ResultPath": "$.storeInfo",
+      "Next": "Is store open?"
+    },
+    "Is store open?": {
+      "Type": "Choice",
+      "Choices": [
+        {
+          "Not": {
+            "Variable": "$.storeInfo.Item.open.BOOL",
+            "BooleanEquals": true
+          },
+          "Next": "Store closed",
+          "Comment": "Store is not open! "
+        }
+      ],
+      "Default": "ListExecutions"
+    },
+    "Store closed": {
+      "Type": "Pass",
+      "Next": "Error Handling",
+      "Result": {
+        "message": "The order cannot be executed because the store is closed.",
+        "code": "ERROR-101"
+      }
+    },
+    "ListExecutions": {
+      "Type": "Task",
+      "Next": "Is capacity available?",
+      "Parameters": {
+        "StateMachineArn": "arn:aws:states:eu-central-1:460357271599:stateMachine:MyStateMachine",
+        "MaxResults": 100,
+        "StatusFilter": "RUNNING"
+      },
+      "Resource": "arn:aws:states:::aws-sdk:sfn:listExecutions",
+      "ResultPath": "$.isCapacityAvailable"
+    },
+    "Is capacity available?": {
+      "Type": "Choice",
+      "Choices": [
+        {
+          "Variable": "$.isCapacityAvailable.Execustion[10]",
+          "IsPresent": true,
+          "Next": "Out of capacity"
+        }
+      ],
+      "Default": "Awaiting order completion"
+    },
+    "Out of capacity": {
+      "Type": "Pass",
+      "Next": "Error Handling",
+      "Result": {
+        "message": "The order cannot be executed because we are out of capacity.",
+        "code": "ERROR-103"
+      }
+    },
+    "Awaiting order completion": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::events:putEvents.waitForTaskToken",
+      "Parameters": {
+        "Entries": [
+          {
+            "Detail": {
+              "Message": "Thanks for 'submitting an order'. The workflow resumes as soon as a barista finish your drink.",
+              "TaskToken.$": "$$.Task.Token",
+              "orderId.$": "$.orderToCreate.orderId",
+              "userId.$": "$.orderToCreate.userId",
+              "drink.$": "$.orderToCreate.drink"
+            },
+            "DetailType": "OrderProcessor.WaitingCompletion",
+            "EventBusName": "sw-event-bus",
+            "Source": "ok.serverlessworkshop"
+          }
+        ]
+      },
+      "Next": "Order completed",
+      "Catch": [
+        {
+          "ErrorEquals": [
+            "States.Timeout"
+          ],
+          "Next": "Barista timed out",
+          "ResultPath": "$.errorComment"
+        }
+      ],
+      "ResultPath": "$.orderToCreate.barista"
+    },
+    "Barista timed out": {
+      "Type": "Pass",
+      "End": true
+    },
+    "Error Handling": {
+      "Type": "Pass",
+      "End": true,
+      "Parameters": {
+        "error": {
+          "message.$": "$.message",
+          "code.$": "$.code"
+        },
+        "contact": {
+          "message": "Don't hesitate to contact us.",
+          "email": "serverless-coffee@gmail.com",
+          "phone": "0800 1234-5678"
+        }
+      }
+    },
+    "Order completed": {
+      "Type": "Pass",
+      "End": true,
+      "Parameters": {
+        "orderCompleted": {
+          "displayMessage.$": "States.Format('Order with id {} is ready for pick up.',$.orderToCreate.orderId)",
+          "orderCreated": {
+            "orderId.$": "$.orderToCreate.orderId",
+            "orderStatus": "ready for pickup",
+            "userId.$": "$.orderToCreate.userId",
+            "drink.$": "$.orderToCreate.drink",
+            "baristaId.$": "$.orderToCreate.barista.baristaId"
+          }
+        }
+      }
+    }
+  }
+}

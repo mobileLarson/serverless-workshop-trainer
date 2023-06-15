@@ -1,0 +1,1 @@
+not($.storeInfo.Item.open.BOOL == true) 

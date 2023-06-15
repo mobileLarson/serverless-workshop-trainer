@@ -1,0 +1,16 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: CloudFormation template for EventBridge rule 'LogAll'
+Resources:
+  EventRule0:
+    Type: AWS::Events::Rule
+    Properties:
+      EventBusName: sw-event-bus
+      EventPattern:
+        source:
+          - ok.serverlessworkshop
+      Name: LogAll
+      State: ENABLED
+      Targets:
+        - Id: Id49f16601-9ab0-4811-981d-4afb36c6a659
+          Arn: >-
+            arn:aws:logs:eu-central-1:460357271599:log-group:/aws/events/swEventBus

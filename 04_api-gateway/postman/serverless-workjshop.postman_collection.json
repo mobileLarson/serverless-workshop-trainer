@@ -1,0 +1,139 @@
+{
+	"info": {
+		"_postman_id": "216e81cc-31c4-40bd-92cd-823eb9c7a84c",
+		"name": "Serverless Workshop",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "1319200"
+	},
+	"item": [
+		{
+			"name": "create new order",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"userId\":\"lars.roewekamp\", \n    \"drink\": \"Ostfriesentee\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{gateway_url}}/orders",
+					"protocol": "https",
+					"host": [
+						"{{gateway_url}}"
+					],
+					"path": [
+						"orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "without payload (ERROR)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "https://{{gateway_url}}/orders",
+					"protocol": "https",
+					"host": [
+						"{{gateway_url}}"
+					],
+					"path": [
+						"orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "read all orders",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://{{gateway_url}}/orders",
+					"protocol": "https",
+					"host": [
+						"{{gateway_url}}"
+					],
+					"path": [
+						"orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "read order with id ...",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://{{gateway_url}}/orders/{{order_id}}",
+					"protocol": "https",
+					"host": [
+						"{{gateway_url}}"
+					],
+					"path": [
+						"orders",
+						"{{order_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update order with id ... ",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{       \n    \"drink\": \"Latte grande\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{gateway_url}}/orders/{{order_id}}",
+					"protocol": "https",
+					"host": [
+						"{{gateway_url}}"
+					],
+					"path": [
+						"orders",
+						"{{order_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "remove order with id ... ",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "https://{{gateway_url}}/orders/SOME_ID",
+					"protocol": "https",
+					"host": [
+						"{{gateway_url}}"
+					],
+					"path": [
+						"orders",
+						"SOME_ID"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

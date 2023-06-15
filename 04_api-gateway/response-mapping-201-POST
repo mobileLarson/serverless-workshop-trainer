@@ -1,0 +1,5 @@
+#set($inputRoot = $input.path('$'))
+$input.json("$")
+#if($inputRoot.toString().contains("errorMessage"))
+#set($context.responseOverride.status = 400)
+#end

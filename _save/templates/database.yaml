@@ -1,0 +1,52 @@
+AWSTemplateFormatVersion: 2010-09-09
+Transform: AWS::Serverless-2016-10-31
+
+Description: Creating DynamoDB tables with CloudFormation
+Resources:
+
+  ## Counting Table - DynamoDB
+  countingTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: ok-sw-order-counter-table
+      AttributeDefinitions:
+        - AttributeName: PK
+          AttributeType: S
+      KeySchema:
+        - AttributeName: PK
+          KeyType: HASH
+      BillingMode: PAY_PER_REQUEST
+
+  ## Order Table - DynamoDB
+  orderTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: ok-sw-order-table
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: PK
+          AttributeType: S
+        - AttributeName: orderNo
+          AttributeType: N
+        - AttributeName: state
+          AttributeType: S
+        - AttributeName: userId
+          AttributeType: S
+        - AttributeName: drink
+          AttributeType: S
+        - AttributeName: barista
+          AttributeType: S
+
+      KeySchema:
+        - AttributeName: PK
+          KeyType: HASH
+
+Outputs:
+
+  OrderTable:
+    Description: Order table created with this template
+    Value: !Ref orderTable
+
+  CountingTable:
+    Description: Counting table created with this template
+    Value: !Ref countingTable

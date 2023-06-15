@@ -1,0 +1,1 @@
+aws stepfunctions send-task-success  --task-output '{"baristaId": "Julia"}' --task-token YOUR_TASK_TOKEN

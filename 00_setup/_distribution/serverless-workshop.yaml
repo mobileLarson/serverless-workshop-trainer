@@ -1,0 +1,311 @@
+AWSTemplateFormatVersion: 2010-09-09
+Transform: AWS::Serverless-2016-10-31
+Description: serverless workshop - core stack.
+
+Parameters:
+  AppName:
+    Type: String
+    Description: Application name (eg. serverless workshop)
+    Default: 'serverlessWorkshop'
+  Service:
+    Type: String
+    Description: Service name (eg. core)
+    Default: 'core'
+  LogRetentionInDays:
+    Type: Number
+    Default: 14
+    Description: CloudWatch Logs retention period
+  TimeInterval:
+    Type: Number
+    Description: Time interval of buckets (mins)
+    Default: 5
+  Source:
+    Type: String
+    Description: Event bus source by application
+    Default: 'ok.serverlessworkshop'
+
+  # TODO do i need this?
+  CodeLength:
+    Type: Number
+    Description: Code length in characters
+    Default: 10
+
+  # TODO do i need this?
+  TokensPerBucket:
+    Type: Number
+    Description: Tokens in each bucket
+    Default: 10
+
+
+Globals:
+  Api:
+    Cors:
+        AllowOrigin: "'*'"
+        AllowHeaders: "'Content-Type'"
+        AllowMethods: "'GET,OPTIONS'"
+
+Resources:
+
+##########################################
+# Basic AWS Lambda role                  #
+##########################################
+
+  ## Basic lambda role
+  swLambdaRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          -
+            Effect: "Allow"
+            Principal:
+              Service:
+                - "lambda.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      Policies:
+        - PolicyName: "BasicLambdaPolicy"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+
+              # cloud watch
+              - Effect: "Allow"
+                Action:
+                  - "logs:CreateLogGroup"
+                  - "logs:CreateLogStream"
+                  - "logs:PutLogEvents"
+                Resource: "*"
+
+      Path: "/"
+
+##########################################
+# Custom event bus                       #
+##########################################
+
+  ServerlessWorkshopEventBus:
+    Type: AWS::Events::EventBus
+    Properties:
+      Name: "sw-event-bus"
+
+  CoreEventBusNameParameter:
+    Type: "AWS::SSM::Parameter"
+    Properties:
+      Name: !Sub /${AppName}/${Service}/eventbusname
+      Description: EventBus Name
+      Type: String
+      Value: !Ref ServerlessWorkshopEventBus
+
+  CoreEventBusARNParameter:
+    Type: "AWS::SSM::Parameter"
+    Properties:
+      Name: !Sub /${AppName}/${Service}/eventbusarn
+      Description: EventBus ARN
+      Type: String
+      Value: !Sub ${ServerlessWorkshopEventBus.Arn}
+
+##########################################
+# Order Counter Service (Table only)     #
+##########################################
+
+  CountingTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: sw-order-counter-table
+      AttributeDefinitions:
+        - AttributeName: PK
+          AttributeType: S
+      KeySchema:
+        - AttributeName: PK
+          KeyType: HASH
+      BillingMode: PAY_PER_REQUEST
+
+
+##########################################
+# Config Service (Table only)            #
+##########################################
+
+  ConfigTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: sw-config-table
+      AttributeDefinitions:
+      - AttributeName: PK
+        AttributeType: S
+      KeySchema:
+      - AttributeName: PK
+        KeyType: HASH
+      BillingMode: PAY_PER_REQUEST
+
+
+#############################################
+#  Order Management service                 #
+#############################################
+
+  ## Order Table - DynamoDB
+  OrderTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: sw-order-table
+      AttributeDefinitions:
+        - AttributeName: PK
+          AttributeType: S
+#        - AttributeName: orderNo
+#          AttributeType: N
+#        - AttributeName: state
+#          AttributeType: S
+#        - AttributeName: userId
+#          AttributeType: S
+#        - AttributeName: drink
+#          AttributeType: S
+#        - AttributeName: barista
+#          AttributeType: S
+      KeySchema:
+        - AttributeName: PK
+          KeyType: HASH
+
+      # all above liste attributes must be in one of ...
+      #   - KeySchema
+      #   - LocalSecondaryIndexes:
+      #   - GlobalSecondaryIndexes:
+
+      BillingMode: PAY_PER_REQUEST
+
+  ## Order Management Role (used in Lambdas)
+  swOrderManagementRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          -
+            Effect: "Allow"
+            Principal:
+              Service:
+                - "lambda.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      Policies:
+        - PolicyName: "OrderManagementPolicy"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+
+              # cloud watch
+              - Effect: "Allow"
+                Action:
+                  - "logs:CreateLogGroup"
+                  - "logs:CreateLogStream"
+                  - "logs:PutLogEvents"
+                Resource: "*"
+
+                # event bus
+              - Effect: "Allow"
+                Action: "events:PutEvents"
+                # Resource: "arn:aws:events:*:*:event-bus/sw-event-bus"
+                Resource: !GetAtt ServerlessWorkshopEventBus.Arn
+
+                # config table
+              - Effect: "Allow"
+                Action:
+                  - "dynamodb:Get*"
+                  - "dynamodb:Update*"
+                  - "dynamodb:PutItem"
+                # Resource: "arn:aws:dynamodb:*:*:table/sw-config-table"
+                Resource: !GetAtt ConfigTable.Arn
+
+                # config table
+              - Effect: "Allow"
+                Action:
+                  - "dynamodb:Get*"
+                  - "dynamodb:Update*"
+                  - "dynamodb:PutItem"
+                # Resource: "arn:aws:dynamodb:*:*:table/sw-order-counter-table"
+                Resource: !GetAtt CountingTable.Arn
+
+                # order table
+              - Effect: "Allow"
+                Action:
+                  - "dynamodb:Get*"
+                  - "dynamodb:Query"
+                  - "dynamodb:Scan"
+                  - "dynamodb:Delete*"
+                  - "dynamodb:Update*"
+                  - "dynamodb:PutItem"
+                # Resource: "arn:aws:dynamodb:*:*:table/sw-order-table"
+                #"arn:aws:dynamodb:eu-central-1:460357271599:table/sw-config-table"
+                Resource: !GetAtt OrderTable.Arn
+      Path: "/"
+
+
+#############################################
+#  Order Processing Service                 #
+#############################################
+
+  swOrderProcessorRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          -
+            Effect: "Allow"
+            Principal:
+              Service:
+                - "states.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      Policies:
+        - PolicyName: "OrderProcessorWFPolicy"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action: "events:PutEvents"
+                # Resource: "arn:aws:events:*:*:event-bus/sw-event-bus"
+                Resource: !GetAtt ServerlessWorkshopEventBus.Arn
+              - Effect: "Allow"
+                Action: "dynamodb:GetItem"
+                # Resource: "arn:aws:dynamodb:*:*:table/sw-config-table"
+                Resource: !GetAtt ConfigTable.Arn
+              - Effect: "Allow"
+                Action: "dynamodb:UpdateItem"
+                #Resource: "arn:aws:dynamodb:*:*:table/sw-config-table"
+                Resource: !GetAtt ConfigTable.Arn
+              - Effect: "Allow"
+                Action: "states:ListExecutions"
+                # Resource: !Join [ "", [ "arn:aws:states:", "eu-central-1", ":", "460357271599", ":stateMachine:", "*" ] ]
+                Resource: !Join [ "", [ "arn:aws:states:", !Ref "AWS::Region", ":", !Ref "AWS::AccountId", ":stateMachine:", "*"] ]
+
+
+##########################################
+# Outputs                                #
+##########################################
+
+Outputs:
+
+  DisplayAppInfo:
+    Description: open knowledge Serverless Workshop
+    Value: !Ref AppName
+
+  OrderTable:
+    Description: Order table created with this template
+    Value: !Ref OrderTable
+
+  CountingTable:
+    Description: Counting table created with this template
+    Value: !Ref CountingTable
+
+  ConfigTable:
+    Description: Counting table created with this template
+    Value: !Ref ConfigTable
+
+  CoreEventBusName:
+    Description: CoreEventBus Name
+    Value: !Ref ServerlessWorkshopEventBus
+
+  CoreEventBusARN:
+    Description: CoreEventBus ARN
+    Value: !GetAtt ServerlessWorkshopEventBus.Arn
+

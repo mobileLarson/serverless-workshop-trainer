@@ -1,0 +1,54 @@
+AWSTemplateFormatVersion: 2010-09-09
+Transform: AWS::Serverless-2016-10-31
+
+Description: Resources for Order Processor
+Resources:
+
+##########################################
+# Order Processor IAM ROLE               #
+##########################################
+
+  swOrderProcessorRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          -
+            Effect: "Allow"
+            Principal:
+              Service:
+                - "states.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      Path: "/"
+  RolePolicies:
+    Type: "AWS::IAM::Policy"
+    Properties:
+      PolicyName: "orderProcessorWFPolicy"
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Action: "events:PutEvents"
+            Resource: "arn:aws:events:eu-central-1:460357271599:event-bus/sw-event-bus"
+            #Resource: !GetAtt ServerlesspressoEventBus.Arn
+          - Effect: "Allow"
+            Action: "dynamodb:GetItem"
+            Resource: "arn:aws:dynamodb:eu-central-1:460357271599:table/sw-config-table"
+            # Resource: !GetAtt ConfigTable.Arn
+          - Effect: "Allow"
+            Action: "dynamodb:UpdateItem"
+            Resource: "arn:aws:dynamodb:eu-central-1:460357271599:table/sw-config-table"
+            # Resource: !GetAtt ConfigTable.Arn
+          - Effect: "Allow"
+            Action: "dynamodb:UpdateItem"
+            Resource: "arn:aws:dynamodb:eu-central-1:460357271599:table/sw-config-table"
+            # Resource: !GetAtt ConfigTable.Arn
+          - Effect: "Allow"
+            Action: "states:ListExecutions"
+            Resource: !Join [ "", [ "arn:aws:states:", "eu-central-1", ":", "460357271599", ":stateMachine:", "*"] ]
+            # Resource: !Join [ "", [ "arn:aws:states:", !Ref "AWS::Region", ":", !Ref "AWS::AccountId", ":stateMachine:", "*"] ]
+
+      Roles:
+        - Ref: "swOrderProcessorRole"

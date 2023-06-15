@@ -1,0 +1,5 @@
+{
+  "StateMachineArn": "[MY_ARN_GOES_HERE]",
+  "MaxResults": 100,
+  "StatusFilter": "RUNNING"
+}

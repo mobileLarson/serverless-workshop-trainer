@@ -1,0 +1,40 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  sam-app
+
+  Sample SAM Template for sam-app
+
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Timeout: 20
+
+Resources:
+  Greetings:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./target/integration-testing.jar
+      Handler: de.openknowledge.workshop.cloud.serverless.lambda.GreetingHandler::handleRequest
+      Runtime: java11
+      Timeout: 300
+      Environment:
+        Variables:
+          ENVIRONMENT: "test"
+
+  GreetingsViaApi:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./target/integration-testing.jar
+      Handler: de.openknowledge.workshop.cloud.serverless.lambda.GreetingHandlerV2::handleRequest
+      Runtime: java11
+      Timeout: 300
+      Environment:
+        Variables:
+          ENVIRONMENT: "test"
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /greetings/
+            Method: post

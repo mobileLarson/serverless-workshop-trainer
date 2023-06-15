@@ -1,0 +1,11 @@
+{
+  "PK": {
+    "S": "config"
+  },
+  "MAX_CAPACITY": {
+    "N": "5"
+  },
+  "OPEN": {
+    "BOOL": true
+  }
+}

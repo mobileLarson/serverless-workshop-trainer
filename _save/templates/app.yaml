@@ -1,0 +1,167 @@
+AWSTemplateFormatVersion: 2010-09-09
+Transform: AWS::Serverless-2016-10-31
+Description: serverless workshop (by open knowledge)
+
+Parameters:
+  AppName:
+    Type: String
+    Description: Application name
+    Default: 'ServerlessWorkshop'
+  AppPrefix:
+    Type: String
+    Description: Application prefix
+    Default: 'ok.sw.'
+  Service:
+    Type: String
+    Description: Service name
+    Default: 'core'
+  LogRetentionInDays:
+    Type: Number
+    Default: 14
+    Description: CloudWatch Logs retention period
+  TimeInterval:
+    Type: Number
+    Description: Time interval of buckets (mins)
+    Default: 5
+  CodeLength:
+    Type: Number
+    Description: Code length in characters
+    Default: 10
+  TokensPerBucket:
+    Type: Number
+    Description: Tokens in each bucket
+    Default: 10
+  Source:
+    Type: String
+    Description: Event bus source by application
+    Default: 'ok.serverlessworkshop'
+
+Globals:
+  Api:
+    Cors:
+      AllowOrigin: "'*'"
+      AllowHeaders: "'Content-Type'"
+      AllowMethods: "'GET,OPTIONS'"
+
+Resources:
+
+  ##########################################
+  # dynamoDB tables                        #
+  # - order table                          #
+  # - counting table                       #
+  # - config table                         #
+  ##########################################
+
+  ## Order Table - DynamoDB
+  OrderTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: sw-order-table
+      AttributeDefinitions:
+        - AttributeName: PK
+          AttributeType: S
+        - AttributeName: SK
+          AttributeType: S
+        - AttributeName: TS
+          AttributeType: N
+        - AttributeName: ORDERSTATE
+          AttributeType: S
+        - AttributeName: USERID
+          AttributeType: S
+
+      KeySchema:
+        - AttributeName: PK
+          KeyType: HASH
+        - AttributeName: SK
+          KeyType: RANGE
+
+      LocalSecondaryIndexes:
+        -
+          IndexName: LSI-timestamp
+          KeySchema:
+            -
+              AttributeName: PK
+              KeyType: HASH
+            -
+              AttributeName: TS
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+
+      GlobalSecondaryIndexes:
+        -
+          IndexName: GSI-status
+          KeySchema:
+            -
+              AttributeName: ORDERSTATE
+              KeyType: HASH
+            -
+              AttributeName: SK
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+
+        -
+          IndexName: GSI-userId
+          KeySchema:
+            -
+              AttributeName: USERID
+              KeyType: HASH
+            -
+              AttributeName: SK
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+
+      BillingMode: PAY_PER_REQUEST
+      StreamSpecification:
+        StreamViewType: NEW_AND_OLD_IMAGES
+
+  ## Counting Table - DynamoDB
+  CountingTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: serverlessworkshop-counting-table
+      AttributeDefinitions:
+        - AttributeName: PK
+          AttributeType: S
+      KeySchema:
+        - AttributeName: PK
+          KeyType: HASH
+      BillingMode: PAY_PER_REQUEST
+
+  ## Config Table - DynamoDB
+  ConfigTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: serverlessworkshop-config-table
+      AttributeDefinitions:
+        - AttributeName: PK
+          AttributeType: S
+      KeySchema:
+        - AttributeName: PK
+          KeyType: HASH
+      BillingMode: PAY_PER_REQUEST
+      StreamSpecification:
+        StreamViewType: NEW_AND_OLD_IMAGES
+
+  ## Validator - DynamoDB
+  ValidatorTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: serverlessworkshop-validator-table
+      AttributeDefinitions:
+        - AttributeName: PK
+          AttributeType: N
+      KeySchema:
+        - AttributeName: PK
+          KeyType: HASH
+      BillingMode: PAY_PER_REQUEST
+      StreamSpecification:
+        StreamViewType: NEW_AND_OLD_IMAGES
+
+
+##########################################
+# Outputs                                #
+##########################################
+

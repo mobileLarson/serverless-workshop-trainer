@@ -1,0 +1,135 @@
+{
+  "Comment": "A description of my state machine",
+  "StartAt": "Order created",
+  "States": {
+    "Order created": {
+      "Type": "Pass",
+      "Next": "is open?",
+      "ResultPath": "$.orderToCreateWrapper",
+      "Parameters": {
+        "orderToCreate.$": "$.detail"
+      },
+      "OutputPath": "$.orderToCreateWrapper"
+    },
+    "is open?": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::dynamodb:getItem",
+      "Parameters": {
+        "TableName": "sw-config-table",
+        "Key": {
+          "PK": {
+            "S": "config"
+          }
+        }
+      },
+      "ResultPath": "$.storeInfo",
+      "Next": "Is store open?"
+    },
+    "Is store open?": {
+      "Type": "Choice",
+      "Choices": [
+        {
+          "Not": {
+            "Variable": "$.storeInfo.Item.open.BOOL",
+            "BooleanEquals": true
+          },
+          "Next": "EventBridge PutEvents"
+        }
+      ],
+      "Default": "ListExecutions"
+    },
+    "ListExecutions": {
+      "Type": "Task",
+      "Next": "Is capacity available?",
+      "Parameters": {
+        "StateMachineArn": "arn:aws:states:eu-central-1:460357271599:stateMachine:sw-order-processor-workflow",
+        "MaxResults": 100,
+        "StatusFilter": "RUNNING"
+      },
+      "Resource": "arn:aws:states:::aws-sdk:sfn:listExecutions",
+      "ResultPath": "$.isCapacityAvailable"
+    },
+    "Is capacity available?": {
+      "Type": "Choice",
+      "Choices": [
+        {
+          "Variable": "$.isCapacityAvailable.Execustion[10]",
+          "IsPresent": true,
+          "Next": "EventBridge PutEvents"
+        }
+      ],
+      "Default": "Awaiting order completion"
+    },
+    "Awaiting order completion": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::events:putEvents.waitForTaskToken",
+      "Parameters": {
+        "Entries": [
+          {
+            "Detail": {
+              "Message": "Thanks for 'submitting an order'. The workflow resumes as soon as a barista finish your drink.",
+              "TaskToken.$": "$$.Task.Token",
+              "orderId.$": "$.orderToCreate.orderId",
+              "userId.$": "$.orderToCreate.userId",
+              "drink.$": "$.orderToCreate.drink"
+            },
+            "DetailType": "OrderProcessor.WaitingCompletion",
+            "EventBusName": "sw-event-bus",
+            "Source": "ok.serverlessworkshop"
+          }
+        ]
+      },
+      "Next": "Order Completed",
+      "ResultPath": "$.orderToCreate.barista",
+      "Catch": [
+        {
+          "ErrorEquals": [
+            "States.Timeout"
+          ],
+          "Comment": "Barsita timed out",
+          "ResultPath": "$.comment",
+          "Next": "Barista timedout"
+        }
+      ],
+      "HeartbeatSeconds": 900
+    },
+    "Barista timedout": {
+      "Type": "Pass",
+      "End": true,
+      "Result": "Barista timedout",
+      "ResultPath": "$.cause"
+    },
+    "EventBridge PutEvents": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::events:putEvents.waitForTaskToken",
+      "Parameters": {
+        "Entries": [
+          {
+            "Detail": {
+              "Message": "Hello from Step Functions!",
+              "TaskToken.$": "$$.Task.Token"
+            },
+            "DetailType": "MyDetailType",
+            "EventBusName": "MyEventBusName",
+            "Source": "MySource"
+          }
+        ]
+      },
+      "End": true
+    },
+    "Order Completed": {
+      "Type": "Pass",
+      "End": true,
+      "OutputPath": "$.orderCreatedWrapper",
+      "Parameters": {
+        "orderCreated": {
+          "orderId.$": "$.orderToCreate.orderId",
+          "userId.$": "$.orderToCreate.userId",
+          "drink.$": "$.orderToCreate.drink",
+          "baristaId.$": "$.orderToCreate.barista.baristaId"
+        }
+      },
+      "ResultPath": "$.orderCreatedWrapper"
+    }
+  }
+}
