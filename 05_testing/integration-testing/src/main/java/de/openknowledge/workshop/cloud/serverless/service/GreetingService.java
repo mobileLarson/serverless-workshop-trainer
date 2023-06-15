@@ -53,7 +53,7 @@ public class GreetingService {
         String greeting = DEFAULT_GREET;
 
         if (firstName != null && lastName != null) {
-            greeting = String.format("Hello, %s %s! i am pleased to meet you.", firstName, lastName);
+            greeting = String.format("Hello, %s %s! I am pleased to meet you.", firstName, lastName);
         }
 
         return greeting;

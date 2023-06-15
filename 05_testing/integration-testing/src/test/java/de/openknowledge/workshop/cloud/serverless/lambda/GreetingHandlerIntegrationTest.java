@@ -30,10 +30,10 @@ import static org.hamcrest.core.IsEqual.equalTo;
  */
 public class GreetingHandlerIntegrationTest {
 
-    private static final String errorMissingParameter = "Missing or incorrect parameters. Expected \"firstName\" and \"lastName\".";
+    private static final String ERROR_MISSING_PARAMETERS = "Missing or incorrect parameters. Expected 'firstName' and 'lastName'.";
 
-    private final static Integer HTTP_STATUS_CODE_OK = 200;
-    private final static Integer HTTP_STATUS_CODE_BAD_REQUEST = 400;
+    private final static Integer HTTP_STATUS_CREATED = 201;
+    private final static Integer HTTP_STATUS_CODE_UNPROCESSABLE_ENTITY = 422;
 
     private final static String CONTENT_TYPE_JSON = "application/json";
 
@@ -52,8 +52,8 @@ public class GreetingHandlerIntegrationTest {
      * Test with payload:
      * - body = {"firstName":"Lars", "lastName":"Roewekamp"}
      * Expected result:
-     * - OK 200
-     * - body {"greeting" : "Hello, Lars Roewekamp! i am pleased to meet you."}
+     * - CREATED 201
+     * - body {"greeting" : "Hello, Lars Roewekamp! I am pleased to meet you."}
      */
     @Test
     public void whenPostWithBody_thenCorrect(){
@@ -69,19 +69,20 @@ public class GreetingHandlerIntegrationTest {
                 .when()
                     .post()
                 .then()
-                    .statusCode(HTTP_STATUS_CODE_OK)
-                    .body("greeting", equalTo("Hello, Lars Roewekamp! i am pleased to meet you."));
+                    .body("greeting", equalTo("Hello, Lars Roewekamp! I am pleased to meet you."))
+                    .statusCode(HTTP_STATUS_CREATED);
+
     }
 
     /**
      * Test without payload:
      * - body = {}
      * Expected result:
-     * - BAD REQUEST 400
-     * - body { "errorCode" : "400" , "errorMessage" : "Missing or incorrect parameters. Expected \"firstName\" and \"lastName\"."}
+     * - UNPROCESSABLE ENTITY 422
+     * - body { "errorCode" : "422" , "errorMessage" : "Missing or incorrect parameters. Expected 'firstName' and 'lastName'."}
      */
     @Test
-    public void whenPostWithoutBody_thenInCorrect(){
+    public void whenPostWithoutBody_thenIncorrect(){
 
         // TODO goto GreetingHandlerV2 and make this test work
 
@@ -92,8 +93,8 @@ public class GreetingHandlerIntegrationTest {
                 .when()
                     .post()
                 .then()
-                    .statusCode(HTTP_STATUS_CODE_BAD_REQUEST)
-                    .body("errorCode", equalTo(400))
-                    .body("errorMessage", equalTo(errorMissingParameter));
+                    .statusCode(HTTP_STATUS_CODE_UNPROCESSABLE_ENTITY)
+                    .body("errorCode", equalTo(HTTP_STATUS_CODE_UNPROCESSABLE_ENTITY))
+                    .body("errorMessage", equalTo(ERROR_MISSING_PARAMETERS));
     }
 }
