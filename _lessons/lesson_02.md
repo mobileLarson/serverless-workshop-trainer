@@ -353,7 +353,7 @@ Frage an dich selbst:
 > Warum gibt es nach wie vor das umständliche Mapping zwischen den Attributen einer Entität und der zugehörigen DynamoDB Tabelle, wenn der gleiche Effekt via Annotationen erreicht werden kann? 
 
 Frage an dich selbst:
-> Welche Vorteile bringt die Trennung der einzelnen CRUD-Funktionen in mehrere Serverless Functions (noch) mit sich.  
+> Welche Vorteile bringt die Trennung der einzelnen CRUD-Funktionen in mehrere Serverless Functions (noch) mit sich?
 
 Frage an dich selbst: 
 > Welche weiteren Layer könnten in unserer Anwendung sinnvoll sein? 

@@ -77,11 +77,5 @@ Frage an dich selbst:
 > Sind mit der Verwendung von IaC im Allgemeinen und CloudFormation im Speziellen auch Nachteile verbunden?
 
 
-## TODOs:
-- ein CloudFormation Template für den gesamten Workshop
-- Lambda zur initialen Befüllung der Tabellen?
-
-
-
 
 

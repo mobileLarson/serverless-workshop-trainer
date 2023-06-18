@@ -411,7 +411,7 @@ Abbildung 04: *OMS API Gateway STAGE*
 
 > **Tipp**: über das Tab _Exportieren_ kann unsere API im Swagger- oder OpenAPI-Format exportiert werden. Entsprechend Exporte liegen im Verzeichnis /04\_api\_gateway/export. 
 
-### Schritt 6: End-to-End Testing
+### Schritt 7: End-to-End Testing
 
 Bleibt uns nur noch, unsere Order Management API von aussen zu testen. Dies kann z.B. via POSTMAN oder ein beliebiges anderes Tool zum Absetzen von HTTP-Request geschehen. Abbildung 05 zeigt eine erfolgreiche Bestellung.
 
@@ -426,10 +426,10 @@ Abbildung 05: *Erfolgereiche Bestellung via API Gateway*
 ### Diskutierenswert ... 
 
 Frage an dich selbst: 
-> Frage numero EINS 
+> Wie können über unser API Gateway Umgebungen wie DEVELOPMENT, TESTING und PRODUCTION voneinander getrennt werden? 
 
 Frage an dich selbst: 
-> Frage numero ZWO 
+> Wie lassen sich Security Attacken, wie z.B. DDoS- und DoS-Angriffe, vermeiden?
 
 
 

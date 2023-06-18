@@ -510,6 +510,10 @@ Frage an dich selbst:
 Frage an dich selbst: 
 > Wie könnte eine Rückmeldung zum bestellenden Kunden (aka Coffee Order App) gegeben werden. Zum Beispiel dann, wenn sich der Status der Bestellung geändert hat? 
 
+Frage an dich selbst: 
+> Könnte es Sinn machen, auch das Order Management auf StepFunctions umzustellen? Wenn ja, warum? 
+
+
 
 
 
