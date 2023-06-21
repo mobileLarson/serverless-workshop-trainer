@@ -2,9 +2,9 @@
 
 ## Übung 3: Serverless Workflow
 
-Im bisherigen Verlauf des Workshops haben wir uns aus fachlicher Sicht hauptsächlich mit dem Aufgeben einer Kaffeeestellung durch den Kunden beschäftigt.  
+Im bisherigen Verlauf des Workshops haben wir uns aus fachlicher Sicht hauptsächlich mit dem Aufgeben einer Kaffeebestellung durch den Kunden beschäftigt.  
 
-Wir haben in dem Zuge verschiedene Beste Practices für Serverless Functions und deren Zusammenspiel mit anderen Cloud-Komponenten kennengerlern. 
+Wir haben in dem Zuge verschiedene Beste Practices für Serverless Functions und deren Zusammenspiel mit anderen Cloud-Komponenten kennengelernt. 
 
 In dieser Übung wollen wir uns nun Serverless Workflows - aka [Step Functions](https://docs.aws.amazon.com/step-functions/latest/dg/welcome.html) - anschauen. Step Functions bieten, anders als Serverless Functions, die Möglichkeit, langlaufende Prozesse abzubilden. 
 
@@ -32,11 +32,11 @@ Bevor wir mit der Abarbeitung der eingehenden Order beginnen, also bevor die/der
 * der Store geöffnet hat: "Is store open?"
 * die/der Barista frei ist: "Is capacity available?"
 
-Wenn ja, kann mit der Abarbeitung der Oder begonnen werden. An dieser Stelle, pausieren wir den Order Processing Workflow solange, bis uns die/der Barista signalisiert, dass ...
+Wenn ja, kann mit der Abarbeitung der Oder begonnen werden. An dieser Stelle, pausieren wir den Order Processing Workflow so lange, bis uns die/der Barista signalisiert, dass ...
 
-* die Bestellung fertig ist: "Awaiting order completiion"
+* die Bestellung fertig ist: "Awaiting order completion"
 
-Ist dies der Fall, wird unser Order Processing Workflow erfolgreich beendet und eine entsprechende Ausgabe erzeugt. Abbildung 02 zeigt eine erfolgreich abgearbeitete Bestellung inkl. Ausgabe: 
+Ist dies der Fall, wird unser Order Processing Workflow erfolgreich beendet und eine entsprechende Ausgabe erzeugt. Abbildung 02 zeigt eine erfolgreich abgearbeitete Bestellung inklusive Ausgabe: 
 
 ![Order Processing](./images/03_02_order_completed.png)
 Abbildung 02: *Successful Order Processing*
@@ -100,11 +100,11 @@ Dieses gilt es herauszufiltern und dem Prozess zur Verfügung zu stellen. Dazu i
 
 > **ASL Mapping**: Das obige Mapping nutzt die Möglichkeit, Variablen via JSON-Paths Syntax zu setzen. Darüber hinaus wird auf eine [Intrinsic Function](https://docs.aws.amazon.com/step-functions/latest/dg/amazon-states-language-intrinsic-functions.html) namens States.format(...) zugegriffen. 
 
-Im Anschluss einfach auf "Next" klicken, um so in den nächsten Schritt (Step 3: Review generated code) des Step Function Wizared zu gelangen. Auf der dann erscheinenden Seite erneut 
+Im Anschluss einfach auf "Next" klicken, um so in den nächsten Schritt (Step 3: Review generated code) des Step Function Wizard zu gelangen. Auf der dann erscheinenden Seite erneut 
 
 * Next 
 
-klicken, um so auf die Seite zur Konfiguration der Step Function zu gelangen (Step 4: Specifiy state machine settings). 
+klicken, um so auf die Seite zur Konfiguration der Step Function zu gelangen (Step 4: Specify state machine settings). 
 
 Im Rahmen der Konfiguration gilt es eine IAM Rolle für den Prozess anzugeben, welche alle dafür notwendigen Berechtigungen für die innerhalb des Workflows auszuübenden Operationen besitzt. Greift der Workflow, wie in unserem Falle auf eine DynamoDB oder den Event Handler zu, muss die Rolle entsprechende Rechte zum lesenden und/oder schreibenden Zugriff auf diese Cloud-Komponenten besitzen. Zum Glück haben wie genau eine solche Rolle bei unserem initialen Setup bereits mit angelegt: 
 
@@ -131,7 +131,7 @@ klicken und im PupUp-Fenster unter Input den Eingang einer Bestellung simulieren
 }
 ```
 
-Das Ergebniss sollte ähnlich wie in Abbildung 04 aussehen: 
+Das Ergebnis sollte ähnlich wie in Abbildung 04 aussehen: 
 
 ![Order Processing](./images/03_04_step_01_trigger_workflow.png)
 Abbildung 04: *Minimaler Workflow mit Trigger*
@@ -153,7 +153,7 @@ Platziere beide Elemente in der angegebenen Reihenfolge in unserem Workflow.
 
 In dem ersten Element - DynamoDB: GetItem - gilt es via API Parameter den direkten Zugriff auf die DB zu realisieren und das Ergebnis dem folgenden Schritt (Flow: Choice) zur Verfügung zu stellen. 
 
-Dazu tragen wir zunächst im Tab _Configuration_ des Get-Item Elements im Feld _API Parameters_ folgende DynamoDB-Abfrage ein, desssen Ergebnis die die DB-Zeile mit der Konfiguration ist: 
+Dazu tragen wir zunächst im Tab _Configuration_ des Get-Item Elements im Feld _API Parameters_ folgende DynamoDB-Abfrage ein, dessen Ergebnis die DB-Zeile mit der Konfiguration ist: 
 
 ```
 {
@@ -229,7 +229,7 @@ Um diese Frage zu klären, greifen wir auf einen kleinen Trick zurück und zähl
 
 #### Aktuelle Kapazität ermitteln
 
-Zum Ermitteln der aktuellen Kapazität zählen wir die aktuell laufenden Instanzen unseres Workflows. Dies können wir mit Hilfe des Workflow-Elements 
+Zum Ermitteln der aktuellen Kapazität zählen wir die aktuell laufenden Instanzen unseres Workflows. Dies können wir mithilfe des Workflow-Elements 
 
 *  StepFunctions: ListExecutions
 
@@ -249,7 +249,7 @@ Damit die ermittelte Information auch an den nächsten Schritt weiter gereicht w
 	* Combine original input with result
 		* $.isCapacityAvailable
 
-Diese Anweisung erzeugt ein neues JSON-Element namens _isCapacityAvailable_ im Output auf das wir in dem folgenden Choice-Element zugreifen können. 
+Diese Anweisung erzeugt ein neues JSON-Element namens _isCapacityAvailable_ im Output, auf das wir in dem folgenden Choice-Element zugreifen können. 
 
 #### Aktuelle Kapazität auswerten
 
@@ -296,17 +296,17 @@ Getestet wird der neue Schritt, wie gewohnt, mit der Eingabe:
 
 Kommen wir nun endlich zur Abarbeitung der Bestellung durch die/den Barista. An dieser Stelle kommt zum ersten Mal unser Event Handler EventBridge ins Spiel. 
 
-Zunächst einmal senden wir aus dem Workflow heraus ein Event an den Event Handler, welches siganlisiert, dass mit der Bearbeitung der Bestellung begonnen wurde. Auf dieses Event könnte z.B. die Bestell-Anwendung des Kunden "hören" und sich die Statusanzeige innerhalb der UI entsprechend ändern. 
+Zunächst einmal senden wir aus dem Workflow heraus ein Event an den Event Handler, welches signalisiert, dass mit der Bearbeitung der Bestellung begonnen wurde. Auf dieses Event könnte z.B. die Bestell-Anwendung des Kunden "hören" und sich die Statusanzeige innerhalb der UI entsprechend ändern. 
 
 Der Trick ist nun, dass wir den Workflow an dieser Stelle so lange anhalten, bis die/der Barista die Fertigstellung der Bestellung signalisiert. Aber immer schön der Reihe nach ... 
 
 #### Put Event: "Bestellung in Bearbeitung"
 
-Als erstes fügen wir als neuen Folgeschritt für den Default-Zweig unseres Choice-Elements "Is capacitiy available?" ein Element vom Typ 
+Als Erstes fügen wir als neuen Folgeschritt für den Default-Zweig unseres Choice-Elements "Is capacity available?" ein Element vom Typ 
 
 * EventBridge: PutEvents 
 
-ein. Dass die für diese Aktion - EventBridge: PutEvent - notwendigen Berechitgungen vorhanden sind, haben wir bereits initial durch Auswahl der IAM Rolle sichergestellt. 
+ein. Dass die für diese Aktion - EventBridge: PutEvent - notwendigen Berechtigungen vorhanden sind, haben wir bereits initial durch Auswahl der IAM Rolle sichergestellt. 
 
 Im Tab _Configuration_ tragen wir im Feld _API Parameters_ folgendes JSON-Template ein, welches zur Laufzeit die Payload das zu versendende Event erzeugt:
 
@@ -352,7 +352,7 @@ mit dessen Hilfe die versendende Workflow-Instanz und der damit verbundene Workf
 
 #### Put Event: "Bestellung in Bearbeitung | Timeout"
 
-Da wir nicht unendlich darauf warten wollen, dass die/der Barista die Fertigstellung der Bestellung meldet, benötigen wir noch eine Option zum automatischen Abbruch via Timeout nach 15 Minuten. Dies erreichen wir über die Angabe eines Ausnahmebehandlung im Tab _Error Handling_: 
+Da wir nicht unendlich darauf warten wollen, dass die/der Barista die Fertigstellung der Bestellung meldet, benötigen wir noch eine Option zum automatischen Abbruch via Timeout nach 15 Minuten. Dies erreichen wir über die Angabe einer Ausnahmebehandlung im Tab _Error Handling_: 
 
 * Catch errors
 	* Add new Catcher 
@@ -368,7 +368,7 @@ Nachdem wir den negativen Fall - Timed out - betrachtet haben, müssen wir uns a
 
 Der Callback erfolgt durch den/die bearbeitende Barista. Es wäre also schön, wenn wir unsere bestehende Payload genau um diese Information anreichern können. Schließlich möchte man doch wissen, bei wem man sich am Ende für den leckeren Kaffee bedanken darf. 
 
-Das Anreichern der Payload für den Folgeschrit geschieht nach gewohntem Muster im Tab _Output_: 
+Das Anreichern der Payload für den Folgeschritt geschieht nach gewohntem Muster im Tab _Output_: 
 
 * Add original input to output using ResultPath
 	* Combine original with input result
@@ -385,7 +385,7 @@ Für den Test unseres aktuellen Order Processing Workflow müssen wir aufgrund d
 
 > *Tipp*: Erst die Beschreibung des Testablaufs durchlesen und dann mit dem Testing beginnen. 
 
-Das triggern des Workflows kann wie gewohnt durch 
+Das Triggern des Workflows kann wie gewohnt durch 
 
 * Start execution 
 * Eingabe der JSON-Payload _{ "detail": ... }_ erfolgen
@@ -393,7 +393,7 @@ Das triggern des Workflows kann wie gewohnt durch
 Um die Antwort der/des Barista zu simulieren, müssen wir zusätzlich 
 
 * das für diesen Prozess-Schritt eindeutige Task-Token ermitteln
-* die Antwort der/des Baristas inkl. Task-Token senden
+* die Antwort der/des Baristas inklusive Task-Token senden
 
 Dafür haben wir maximal 900 Sekunden Zeit. Das sollte eigentlich machbar sein ;-) 
 
@@ -402,7 +402,7 @@ Das Task-Token finden wir nach dem Anstoßen des Workflows auf der zur aktuellen
 * Resource: EventBridge event bus
 * Value von TaskToken kopieren
 
-Dieses Token verwenden wir nun, um dem Workflow, der auf Antwort wartet, Rückmeldung zu geben. Da uns allerings die dazu notwendige App fehlt, simulieren wir den Call mit Hilfe der Cloud-Console _CloudShell_: 
+Dieses Token verwenden wir nun, um dem Workflow, der auf Antwort wartet, Rückmeldung zu geben. Da uns allerdings die dazu notwendige App fehlt, simulieren wir den Call mithilfe der Cloud-Console _CloudShell_: 
 
 * CloudShell Service aufrufen (im neuen Fenster)
 
@@ -415,9 +415,9 @@ wobei YOUR_TASK_TOKEN durch den kopierten TaskToken ersetzt werden muss.
 
 ### Schritt 5: "Order Completed"
 
-Jetzt bleibt uns nur noch, das Endresultat einer erfolgreichen Bestellung ein wenig aufzuhübschen. 
+Jetzt bleibt uns nur noch, das Endresultat einer erfolgreich abgearbeiteten Bestellung ein wenig aufzuhübschen. 
 
-Zunächst einmal Transformieren wir dafür den Input des Pass-Elements, welches nach erfolgreicher Bestätigung angesprochen wird, indem wir im Tab _Input_ 
+Um dies zu erreichen, transformieren wir den Input des Pass-Elements, welches nach erfolgreicher Bestätigung angesprochen wird, indem wir im Tab _Input_ 
 
 * Transform input with Parameters 
 
@@ -441,7 +441,7 @@ auswählen und folgende JSON Payload eingeben:
 
 ### Schritt 6: End-to-End Testing
 
-Im Folgenden sind noch einmal die Schritte für einen erfolgreiches End-to-End Test als Kopiervorlage aufgezeigt : 
+Im Folgenden sind noch einmal die Schritte für einen erfolgreiches End-to-End Test als Kopiervorlage aufgezeigt: 
 
 #### Successful Order - 1: Workflow starten
 
@@ -465,7 +465,7 @@ Im Anschluss Callback via CloudShell absetzen:
 
 	aws stepfunctions send-task-success  --task-output '{"baristaId": "Julia"}' --task-token MY_TASK_TOKEN. 
 
-Abbildung 08 zeigt das Ergebnis eines erolgreichen Tests: 
+Abbildung 08 zeigt das Ergebnis eines erfolgreichen Tests: 
 
 ![Order Processing](./images/03_08_step_05_end-to-end-success.png)
 Abbildung 08: *Successful End-to-End Test*
@@ -508,7 +508,7 @@ Frage an dich selbst:
 > Wie wird der aktuelle Schritt innerhalb einer bestehenden Workflow-Instanz identifiziert? Und wofür ist das überhaupt wichtig? 
 
 Frage an dich selbst: 
-> Wie könnte eine Rückmeldung zum bestellenden Kunden (aka Coffee Order App) gegeben werden. Zum Beispiel dann, wenn sich der Status der Bestellung geändert hat? 
+> Wie könnte eine Rückmeldung zum bestellenden Kunden (aka Coffee Order App) gegeben werden? Zum Beispiel dann, wenn sich der Status der Bestellung geändert hat? 
 
 Frage an dich selbst: 
 > Könnte es Sinn machen, auch das Order Management auf StepFunctions umzustellen? Wenn ja, warum? 

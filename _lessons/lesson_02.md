@@ -10,7 +10,7 @@ Ziel dieser Übung ist es, ...
 
 ### Step 01: Order Handler (simple)
 
-Im ersten Teil der Übung schaunen wir uns an, wie wir mittels Serverless Function eine Coffee Order in einer DynamoDB Tabelle abspeichern können. 
+Im ersten Teil der Übung schauen wir uns an, wie wir mittels Serverless Function eine Coffee Order in einer DynamoDB Tabelle abspeichern können. 
 
 Das Beispiel befindet sich im Verzeichnis: 
 
@@ -30,9 +30,9 @@ OrderHandler -> OrderService -> DynamoDBOrderRepository
 
 #### Aufgaben: 
 
-In den drei oben genannten Klassen finden sich TODOs, deren Umsetzung dabei helfen sollen, das Zusammenspiel der verschiedenen Komponenten zu verstehen. Am besten gehst du bei der Abarbeitung in der oben beschriebenen Reihenfolge vor. 
+In den drei oben genannten Klassen finden sich To-dos, deren Umsetzung dabei helfen sollen, das Zusammenspiel der verschiedenen Komponenten zu verstehen. Am besten gehst du bei der Abarbeitung in der oben beschriebenen Reihenfolge vor. 
 
-Sobald die Übung ausimplementiert und via maven kompiliert wurde
+Sobald die Übung implementiert und via maven kompiliert wurde
 
 
 ```
@@ -42,7 +42,7 @@ mvn clean package
 
 kann das fertige Artefakt in die AWS Cloud hochgeladen und als Lambda Funktion bereitgestellt werden. 
 
-> **TIPP**: Mit Hilfe der Umgebungsvariable AUDIT_ENABLED = true werden Informationen zum eingehenden Request und ausgehendem Response ausgegeben. Die kann ggf bei der Fehlersuche helfen. 
+> **TIPP**: Mit der Hilfe der Umgebungsvariable AUDIT_ENABLED = true werden Informationen zum eingehenden Request und ausgehendem Response ausgegeben. Die kann ggf bei der Fehlersuche helfen. 
 
 
 Das Testing kann mittels folgender Payload erfolgen: 
@@ -90,18 +90,18 @@ OrderHandler
 
 Anders als in der vorangegangenen Übung, führt die Serverless Function die gefragte Operation nicht direkt aus, sondern dient lediglich als Dispatcher für die verschiedenen CRUD-Operationen auf der Order-Entität. 
 
-Das eigentliche Handling der jeweiligen CRUD-Anfragen findet in den dedizierten Order Handlern (create, read, update und delete) statt. 
+Das eigentliche Handling der jeweiligen CRUD-Anfragen findet in den dedizierten Order Handler Klassen (create, read, update und delete) statt. 
 
-Auch in diesem Beispiel trennen wir wieder den Code für Infrastuktur und Business-Logik. D.h. die Handler-Klassen nehmen den Request entgegen und geben den Response zurück. Die eigentlich Abarbeitung der Business-Logik erfolgt wie gehabt innerhalb eines Services namens OrderService.  
+Auch in diesem Beispiel trennen wir wieder den Code für Infrastruktur und Business-Logik. D.h. die Handler-Klassen nehmen den Request entgegen und geben den Response zurück. Die eigentlich Abarbeitung der Business-Logik erfolgt wie gehabt innerhalb eines Services namens OrderService.  
 
 #### Aufgaben: 
 
-**Use-Case Flow:** Schaue dir für den Use-Case "create order" den konkreten Ablauf vom OrderHandler bis zum Datenzurgriff (via Repository) an. 
+**Use-Case Flow:** Schaue dir für den Use-Case "create order" den konkreten Ablauf vom OrderHandler bis zum Datenzugriff (via Repository) an. 
 
 > Wirf auch einen Blick in die Klasse OrderCounterService, in der via UpdateExpression eine fortlaufende OrderNo direkt auf der DynamoDB erzeugt wird.  
 
 **Use-Case "Update Order":** 
-Implementiere die fehlende Funktionalität für den Use-Case "update order". Schaue dir dazu die TODOs in den Klassen
+Implementiere die fehlende Funktionalität für den Use-Case "update order". Schaue dir dazu die To-dos in den Klassen
 
 * OrderHandler 
 * UpdateOrderHandler
@@ -110,7 +110,7 @@ Implementiere die fehlende Funktionalität für den Use-Case "update order". Sch
 
 an. 
 
-Falls du die AWS-CLI installiert und lokal entsprechende Credentials hinterlegt hast, kannst du deine Implementierung direkt mit Hilfe der Klasse 
+Falls du die AWS-CLI installiert und lokal entsprechende Credentials hinterlegt hast, kannst du deine Implementierung direkt mithilfe der Klasse 
 
 * TestUpdateOrder
 
@@ -148,7 +148,7 @@ Die bisherige Version unseres Order Management Services birgt noch einiges an Ve
 
 * Mapping der Order-Attribute auf DB-Columns ist umständlich
 * OrderHandler als Dispatcher != Single Responsibility Pattern
-* Deploy-Artefakt ist sehr groß (ca 20MB)
+* Deploy-Artefakt ist sehr groß (ca 20 MB)
 
 
 Als Basis für die Übung dient weiterhin das Verzeichnis: 
@@ -169,21 +169,21 @@ AWS bietet daher zusätzlich eine flexible High-Level Bibliothek zum direkten Ma
 Während in dem _AWS SDK for Java V1_ diese Aufgabe noch durch einen speziellen Mapper namens _DynamoDBMapper_ übernommen wurde, ist die Funktionalität in _AWS SDK for Java V2_ direkt in einen Enhanced DynamoDB Client eingeflossen (siehe auch [DynamoDBEnhancedClient](https://docs.aws.amazon.com/sdk-for-java/latest/developer-guide/dynamodb-enhanced-client.html)). 
 
 
-Die Angabe des Mapping erfolgt durch Annotation der Entität  
+Die Angabe des Mappings erfolgt durch Annotation der Entität  
 
 * Order 
 
-mit deren Hilfe via DynamoDBEnhancedClient ein typisiserter Tabellenzugriff ermöglicht wird. 
+mit deren Hilfe via DynamoDBEnhancedClient ein typisierter Tabellenzugriff ermöglicht wird. 
 
 #### Aufgabe 
 
-Wie schon in der Übung zuvor, wollen wir die fehlende Funktionalität für den Use-Case "update order" implementieren. Eine Herausforderung dabei ist, dass wir mit dem Request nur die zu ändernden Daten bekommen und somit die bestehende Order in der Datenbank nicht einfach durch die neue Order ersetzen können. 
+Wie schon in der Übung zuvor wollen wir die fehlende Funktionalität für den Use-Case "update order" implementieren. Eine Herausforderung dabei ist, dass wir mit dem Request nur die zu ändernden Daten bekommen und somit die bestehende Order in der Datenbank nicht einfach durch die neue Order ersetzen können. 
 
 Schaue dazu zunächst die Annotationen in der Klasse 
 
 * Order 
 
-an und implementiere im Anschluss die TODOs in der Klasse 
+an und implementiere im Anschluss die To-dos in der Klasse 
 
 * DynamoDBEnhancedOrderRepository   
 
@@ -191,7 +191,8 @@ Das Testing der Änderungen kann wie im vorherigen Beispiel via
 
 * TestUpdateOrder
 
-oder aber durch Hochladen des OrderManagement-Artefakts in die AWS Cloud erfolgen. Zum testen können wieder die beiden oben aufgezeigten Test-Events verwendet werden: 
+oder aber durch Hochladen des OrderManagement-Artefakts in die AWS Cloud erfolgen. 
+Zum Testen können wieder die beiden oben aufgezeigten Test-Events verwendet werden: 
 
 
 Test-Event 1: "Neue Order erstellen": 
@@ -219,7 +220,7 @@ Test-Event 2: Order ändern (MY-ORDER-ID ersetzen):
 ```
 
 
-> **ACHTUNG**: Damit deine Änderungen zur Laufzeit zum Tragen kommen, musst du in der Klasse _OrderService_ das entsprechende Repository  _DynamoDBEnhancedRepository_ anstelle von _DynamoDBRepository_ heranziehen. 
+> **ACHTUNG**: Damit deine Änderungen zur Laufzeit zum Tragen kommen, musst du in der Klasse _OrderService_ das entsprechende Repository _DynamoDBEnhancedRepository_ anstelle von _DynamoDBRepository_ heranziehen. 
 
 
 ### Step 04: Order CRUD Handler (layered)
@@ -227,7 +228,7 @@ Test-Event 2: Order ändern (MY-ORDER-ID ersetzen):
 Nachdem das Problem des Mappings der Order-Attribute auf DB-Columns erledigt ist, bleiben nach wie vor zwei weitere Herausforderungen bestehen: 
 
 * OrderHandler als Dispatcher != Single Responsibility Pattern
-* Deploy-Artefakt ist sehr groß (ca 20MB)
+* Deploy-Artefakt ist sehr groß (ca 20 MB)
 
 Für diesen Teil der Übung wechseln wir zu dem Order Manager (layered Version) im Verzeichnis: 
 
@@ -249,7 +250,7 @@ zu erreichen. Beides wirkt sich direkt auf die Latenz (aka UX) und die Kosten au
 
 #### Aufgabe: 
 
-**Use-Case Flow:** Schaue dir für den Use-Case "create order" den konkreten Ablauf vom CreateOrderHandler bis zum Datenzurgriff (via Repository) an. Was fällt dir auf? 
+**Use-Case Flow:** Schaue dir für den Use-Case "create order" den konkreten Ablauf vom CreateOrderHandler bis zum Datenzugriff (via Repository) an. Was fällt dir auf? 
 
 > **Profi-Tipp**: Ein Blick in die pom.xml trägt eventuell zum besseren Verständnis bei ;-)
 
@@ -274,7 +275,7 @@ besteht. Hierbei handelt es sich um einen sogenannten Lambda-Layer, also einer A
 
 #### Aufgabe:
 
-Erstelle via AWS Web Console einen Lambda Layer auf Basis des ZIP-Files 
+Erstelle via AWS Web Console einen Lambda-Layer auf Basis des ZIP-Files 
 
 * serverless-workshop-base-layer.zip
 

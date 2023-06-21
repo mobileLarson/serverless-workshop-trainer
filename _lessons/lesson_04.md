@@ -5,17 +5,17 @@
 Bisher ist alles was wir erstellt und implementiert haben nur innerhalb unseres AWS Cloud-Accounts zugreifbar. Mit dieser Übung möchten wir nun auch den Zugriff von aussen ermöglichen. Das Mittel zum Zweck ist ein [AWS API Gateway] (https://docs.aws.amazon.com/de_de/apigateway/latest/developerguide/welcome.html). 
 
 Ziel dieser Übung ist es, ...
-> die Funktionalität des Order Managements via REST-API für externe Clients (z.B. Mobile oder Web Apps) zur Verfügung zu stellen. 
+> die Funktionalität des Order Managements via REST-API für externe Clients (z.B. Mobile- oder Web-Apps) zur Verfügung zu stellen. 
 
 ### Schritt 1: API Gateway anlegen 
 
-Im ersten Schritt legen wir zunächst einmal ein leeres API Gateway an und machen uns mit den grundlegenen Konfigurationsmöglichkeiten vertraut. 
+Im ersten Schritt legen wir zunächst einmal ein leeres API-Gateway an und machen uns mit den grundlegenden Konfigurationsmöglichkeiten vertraut. 
 
 Zu diesem Zweck rufen wir den AWS Service _API Gateway_ auf und klicken dort auf 
 
 * API erstellen
 
-Da wir eine RESTful-API erstellen wollen, wählen wir auf der im Anschluss erscheinenden Seit die Option 
+Da wir eine RESTful-API erstellen wollen, wählen wir auf der im Anschluss erscheinenden Seite die Option 
 
 * REST API > Erstellen 
 
@@ -34,17 +34,17 @@ Abbildung 01: *OMS API Gateway*
 Wir möchten mit unserer RESTful API Ressourcen vom Typ _Order_ anlegen, ändern, löschen und natürlich auch abfragen können. Unsere API benötigt also eine entsprechende Ressource: 
 
 * Aktionen > Ressource erstelle
-* Ressorucenname: Orders
+* Ressourcenname: Orders
 * Ressourcenpfad: oders
 * API Gateway CORS aktivieren: yes
 
 Im Anschluss auf _Ressource erstellen_ klicken und fertig ist die Basis unserer API. 
 
-Da wir CORS aktiviert haben, wird automatisch die http-Methode _OPTIONS_ zur Verfügung gestellt. Diese können wir nuzten, um einen ersten Test durchzuführen und uns so ein wenig mit der Oberfläche vertraut zu machen. Nehmt euch also ein wenig Zeit und klickt euch durch die AWS Gateway UI für die http-Methode _OPTIONS_ 
+Da wir CORS aktiviert haben, wird automatisch die http-Methode _OPTIONS_ zur Verfügung gestellt. Diese können wir nutzen, um einen ersten Test durchzuführen und uns so ein wenig mit der Oberfläche vertraut zu machen. Nehmt euch also ein wenig Zeit und klickt euch durch die AWS Gateway UI für die http-Methode _OPTIONS_ 
 
 Natürlich benötigen wir neben _OPTIONS_ noch weitere http-Methoden, um unser oben beschriebenes Ziel zu erreichen. Aber welche sind das genau? 
 
-Zum Anlegen einer Order benötiegen wir 
+Zum Anlegen einer Order benötigen wir 
 
 	POST /orders
 	
@@ -76,31 +76,31 @@ eine zweite Ressource bzw eine Sub-Ressource von der bereits existierenden Resso
 	
 dar. Entsprechend müssen wir also zunächst diese Ressource anlegen, bevor wir mit den weiteren Methoden (auf dieser Ressource) fortfahren können: 
 
-> **Achtung**: Vor den folgenden Schritten, zunächste die Ressource /orders markieren, damit die neue Ressource als Sub-Ressource von der bereits bestehenden /orders Ressource angelegt wird!
+> **Achtung**: Vor den folgenden Schritten, zunächst die Ressource /orders markieren, damit die neue Ressource als Sub-Ressource von der bereits bestehenden /orders Ressource angelegt wird!
 
 * Aktionen > Ressource erstellen
-* Ressorucenname: {orderId}
+* Ressourcenname: {orderId}
 * Ressourcenpfad: oders/{orderId}
 
-Im Anschlus können wir die drei fehlenden Methoden für unsere neue Ressource _/orders/{orderId}_ anlegen: 
+Im Anschluss können wir die drei fehlenden Methoden für unsere neue Ressource _/orders/{orderId}_ anlegen: 
 
 * Aktionen > Methode erstellen: GET > bestätigen
 * Aktionen > Methode erstellen: PUT > bestätigen
 * Aktionen > Methode erstellen: DELETE > bestätigen
 
-Das Resultat unser bisherigen Bemühungen sollte ein wie in Abbildung 02 dargestellter Ressourcen-/Methoden-Baum sein. 
+Das Resultat unserer bisherigen Bemühungen sollte ein wie in Abbildung 02 dargestellter Ressourcen-/Methoden-Baum sein. 
 
 ![Order Processing](./images/04_02_resources_methods.png)
 Abbildung 02: *OMS API Gateway mit Ressourcen und Methoden*
 
 
-Die Schnittestelle unsere Restful API wäre somit fertig. Allerdings würde ein Aufruf einer der möglichen Methoden noch keine Aktion im Backend auslösen. Genau diese Herausforderung wollen wir in nächsten Schritt angehen.
+Die Schnittstelle unsere Restful API wäre somit fertig. Allerdings würde ein Aufruf einer der möglichen Methoden noch keine Aktion im Backend auslösen. Genau diese Herausforderung wollen wir in nächsten Schritt angehen.
 
 ### Schritt 3: Verbindung zum Backend 
 
-Um die einzelnen Methoden mit Funktionalität zu versehen, müssen wir eine Verbindung zum Backend herstellen. Dies passiert auf Ebene der einzelen http-Methoden. 
+Um die einzelnen Methoden mit Funktionalität zu versehen, müssen wir eine Verbindung zum Backend herstellen. Dies passiert auf Ebene der einzelnen http-Methoden. 
 
-Für das Anlegen einer neuen Order zum Beispiel, gilt es die http-Methode 
+Für das Anlegen einer neuen Order zum Beispiel gilt es die http-Methode 
 
 	POST /orders
 	
@@ -116,7 +116,7 @@ zu verbinden:
 * Lambda-Funktion: sw-oms-create-order 
 * "Speichern" klicken
 
-Durch diesen Eintrag erlauben wir dem API Gateway, auf unsere Lambda-Funktion zuzugreifen. Dies gilt es ggf in einem PopUp zu bestätigen. 
+Durch diesen Eintrag erlauben wir dem API-Gateway, auf unsere Lambda-Funktion zuzugreifen. Dies gilt es ggf in einem PopUp zu bestätigen. 
 
 Im Anschluss, können wir die Verbindung testen. Anders als zuvor beim Test der http-Methode _OPTIONS_ müssen wir beim Testen der Integration via _POST_ eine Payload - also die anzulegende Bestellung - mitgeben. Dazu tragen wir im Feld _Anforderungstext_ unsere JSON-Payload ein und klicken auf _Testen_: 
 
@@ -132,7 +132,7 @@ Das Resultat unseres Calls sollte in etwa wie in Abbildung 03 aussehen.
 ![Order Processing](./images/04_03_backend_integration.png)
 Abbildung 03: *OMS API Gateway mit Backend-Integration*
 
-Genau so wie für die Methode 
+Genau so, wie für die Methode 
 
 	POST /orders
 	
@@ -150,11 +150,11 @@ Bei den drei übrigen Calls für eine dedizierte Order-Ressource, also diejenige
 	PUT /order/{orderId}
 	DELETE /order/{orderId}
 
-muss für den Test noch zusätzlich der Wert für Pfad-Parameter _orderId_ im dafür automatisch generierten Eingebefeld angegeben werden:
+muss für den Test noch zusätzlich der Wert für Pfad-Parameter _orderId_ im dafür automatisch generierten Eingabefeld angegeben werden:
 
 * Pfad > {oderId}
 
-Im folgenden sind noch einmal exemplarischen Test-Payloads für die verschiedenen Calls aufgeführt:  
+Im Folgenden sind noch einmal exemplarischen Test-Payloads für die verschiedenen Calls aufgeführt:  
 
 Test-Payload für **oms-read-order**: 
 
@@ -198,9 +198,9 @@ Test-Payload für **oms-delete-order**:
 
 ### Schritt 4: Request Parameter- und Payload-Mapping
 
-Theoretisch ist unsere API nun vollständig mit dem Backend integegriert und könnte somit bereitgestellt werden. Unschön ist allerdings, dass wir bei den drei Calls für dedizierte Ressourcen mit der _orderId_ redundante Informationen in der Payload und im Pfad weitergeben. Dies gilt insbesondere für die http-Methoden _GET_ und _DELETE_, die normalerweise gänzlich ohne Payload auskommen würden. 
+Theoretisch ist unsere API nun vollständig mit dem Backend integriert und könnte somit bereitgestellt werden. Unschön ist allerdings, dass wir bei den drei Calls für dedizierte Ressourcen mit der _orderId_ redundante Informationen in der Payload und im Pfad weitergeben. Dies gilt insbesondere für die http-Methoden _GET_ und _DELETE_, die normalerweise gänzlich ohne Payload auskommen würden. 
 
-Wir werden daher in diesem Schritt für die beiden genannten Methoden ein automatische Mapping erstellen, welches den Pfadparameter _oderId_ ausliest und damit die Payload anreichert: 
+Wir werden daher in diesem Schritt für die beiden genannten Methoden ein automatisches Mapping erstellen, welches den Pfadparameter _oderId_ ausliest und damit die Payload anreichert: 
 
 * GET /orders/{orderId} auswählen
 * Integrationsanforderung (Request) anklicken
@@ -208,7 +208,7 @@ Wir werden daher in diesem Schritt für die beiden genannten Methoden ein automa
 * Zuweisungsvorlage hinzufügen
 * Inhaltstyp: application/json
 
-In das unter _Inhaltsytp_ stehende Eingabefenster folgendes Mapping eintragen und im Anschluss _Speichern_ klicken: 
+In das unter _Inhaltstyp_ stehende Eingabefenster folgendes Mapping eintragen und im Anschluss _Speichern_ klicken: 
 
 ```
 #set($inputRoot = $input.path('$'))
@@ -217,7 +217,7 @@ In das unter _Inhaltsytp_ stehende Eingabefenster folgendes Mapping eintragen un
 }
 ```
 
-Wenn wir jetzt die beiden Methoden erneut testen, können wir die Payload leer lassen. In der Ausgabe finden wir im Anschluss u.a. die folgenden Informationen zu der erfolten automatioschen Transformation: 
+Wenn wir jetzt die beiden Methoden erneut testen, können wir die Payload leer lassen. In der Ausgabe finden wir im Anschluss u.a. die folgenden Informationen zu der erfolgten automatischen Transformation: 
 
 ```
 HTTP Method: DELETE, Resource Path: /orders/12334332
@@ -228,7 +228,7 @@ Endpoint request body after transformations: {
 }
 ```
 
-Abbdilung 04 zeigt einen erfolgreichen Test-Call für die http-Methode _GET_ auf einer dedizierten Ressource:
+Abbildung 04 zeigt einen erfolgreichen Test-Call für die http-Methode _GET_ auf einer dedizierten Ressource:
 
 ![Order Processing](./images/04_04_get_order.png)
 Abbildung 04: *GET /orders/{orderId} mit automatischem Mapping*
@@ -242,7 +242,7 @@ $input.json('$')
 
 ### Schritt 5: Response Status Code Mapping
 
-Im aktuellen Zustand liefert unser API Gateway grundsätzlich einen HTTP-Status Code 200 (OK) zurück. Dies gilt auch dann, wenn auf Seiten des Backends, also innerhalb unserr Serverless Functions, ein Fehler aufgetreten ist. Hier gilt es Abhilfe zu schaffen. 
+Im aktuellen Zustand liefert unser API-Gateway grundsätzlich einen HTTP-Status Code 200 (OK) zurück. Dies gilt auch dann, wenn aufseiten des Backends, also innerhalb unserer Serverless Functions, ein Fehler aufgetreten ist. Hier gilt es Abhilfe zu schaffen. 
 
 Zum einen wollen wir Fehler auch als solche darstellen, z.B. durch 
 
@@ -266,9 +266,9 @@ zurückgeben, sondern den spezifischeren Status Code
 
 * 201 CREATED
 
-> *Anmerkung*: Aus fachlicher Sicht könnte man an dieser Stelle auch überlegen, einen Status Code 202 ACCEPED zurückzugeben, da die Order zwar angenommen (confirmed) aber noch nicht ausgeführt (ready for pick-up) ist. 
+> *Anmerkung*: Aus fachlicher Sicht könnte man an dieser Stelle auch überlegen, einen Status Code 202 ACCEPTED zurückzugeben, da die Order zwar angenommen (confirmed) aber noch nicht ausgeführt (ready for pick-up) ist. 
 
-Um den Status Code 201 als Rückgabewert für eine erfolgreiche Bestellaufgabe zu setzen, müssen wir zunächst diesen Code für die Methode _POST_ als mögliche Option angeben: 
+Um den Status Code 201 als Rückgabewert für eine erfolgreich aufgegebenen Bestellung zu setzen, müssen wir zunächst diesen Code für die Methode _POST_ als mögliche Option angeben: 
 
 * POST Methode selektieren
 * Antwort hinzufügen 
@@ -281,13 +281,13 @@ Weil wir gerade schon dabei sind, können wir auch gleich die beiden Codes
 * 422 UNPROCESSABLE ENTITY
 * 500 INTERNAL SERVER ERROR
 
-hinzufügen. Da es sich bei diesen beiden Antworttypen um Fehlermeldungen handelt, sollten wir zusätzlich bei dem Antworttext die folgenden Angaben machen: 
+hinzufügen. Da es sich bei diesen drei Antworttypen um Fehlermeldungen handelt, sollten wir zusätzlich bei dem Antworttext die folgenden Angaben machen: 
 
 * Antwortmodell hinzufügen
-* Inhaltstyp > apllication/json
+* Inhaltstyp > application/json
 * Modelle > Error 
 
-Aber zurück zu unserem Status Code 201. Diesen gilt es nun als Default für eine erfolgreiche Bestellung zu setzen: 
+Aber zurück zu unserem Status Code 201. Diesen gilt es nun, als Default für eine erfolgreiche Bestellung zu setzen: 
 
 * POST Methode selektieren
 * Integrationsantwort auswählen
@@ -299,13 +299,13 @@ Der Status 201 wird so automatisch zur neuen Standardantwort.
 
 #### Status Code 4xx / 5xx setzen
 
-Schauen wir uns nun den Fehlerfall an. Was passiert zum Beispiel, wenn wir eine Bestellung aufegeben, aber in der Payload vergessen, das zu bestellende Geträng anzugeben? 
+Schauen wir uns nun den Fehlerfall an. Was passiert zum Beispiel, wenn wir eine Bestellung aufgegeben, aber in der Payload vergessen, das zu bestellende Getränk anzugeben? 
 
-Die Lambda-Funktion wifrt in diesem Fall eine IllegalArgumumentException inkl. des Fehlertextes 
+Die Lambda-Funktion wirft in diesem Fall eine IllegalArgumentException inklusive des Fehlertextes 
 
 * "Missing attributes (userId and/or drink)"
 
-Dei Serverless Function wrappt das ganze in einer LambdaException welche für den folgenden Output sorgt: 
+Dei Serverless Function wrappt das Ganze in einer LambdaException welche für den folgenden Output sorgt: 
 
 ```
 {
@@ -326,7 +326,7 @@ Dies machen wir uns für die Zuweisung des Fehler-Codes zu nutzen:
 	* Status der Methoden-Antwort > 422 
 * Speichern 
 
-In obigen Beispiel reagieren wir konkret auf den Fall, das eines der JSON-Argumente nicht angegegen wurde. Alternativ kann als RegEx natürlich auch einfach 
+In obigen Beispiel reagieren wir konkret auf den Fall, das eines der JSON-Argumente nicht angegeben wurde. Alternativ kann als RegEx natürlich auch einfach 
 
 * .\*ERROR.\* 
 
@@ -343,7 +343,8 @@ Eine Alternative Möglichkeit bietet sich, durch das gezielte Umleiten der Defau
 	* Template eingeben (siehe Code-Snippet direkt im Anschluss)
 	* Speichen nicht vergessen! 
 
-Das folgende Template schaut in der **gesamten** Payload nach dem Begriff _errorMessage_ und überschreibt beim Auffinden den Status-Code mit 400. Da _errorMessage_ eines der JSON-Elemente der LambdaException ist, wird das Template im Falle eines Fehler immer gefunden: 
+Das folgende Template schaut in der **gesamten** Payload nach dem Begriff _errorMessage_ und überschreibt beim Auffinden den Status-Code mit 400. Da _errorMessage_ eines der JSON-Elemente der LambdaException ist, wird das Template im Falle 
+eines Fehlers immer gefunden: 
 
 ```		
 #set($inputRoot = $input.path('$'))
@@ -362,7 +363,8 @@ Es git übrigens, dass zunächst die spezielleren Lambda-Fehler RegEx greifen, b
 
 #### Aufgaben
 
-Im folgenden sollst du einige Mappings nach dem oben beschriebenen Schema vornehmen. Welche Variablen dir dabei für den gezielten Zugriff auf den Server-Response, die Payload etc. zur Verfüng stehen, findest du unter 
+Im Folgenden sollst du einige Mappings nach dem oben beschriebenen Schema vornehmen. Welche Variablen dir dabei für den gezielten Zugriff 
+auf den Server-Response, die Payload etc. zur Verfügung stehen, findest du unter 
 [Setting up data transformations for REST APIs](https://docs.aws.amazon.com/apigateway/latest/developerguide/rest-api-data-transformations.html)
 
 
@@ -381,7 +383,7 @@ Für den Fall, dass
 
 * GET /orders 
 
-eine leere Liste zurück liefert, soll der Status Code 204 NO CONTENT gestezt werden. 
+eine leere Liste zurückliefert, soll der Status Code 204 NO CONTENT gesetzt werden. 
 
 **Aufgabe 3:**
 
@@ -389,22 +391,22 @@ Für den Fall, dass
 
 * GET /order/{orderId} 
 
-kein Resultat zurück liefert, soll der Status Code 404 NOT FOUND gestezt werden.
+kein Resultat zurückliefert, soll der Status Code 404 NOT FOUND gesetzt werden.
 
 	
-### Schritt 6: Bereitstellung des API Gateways
+### Schritt 6: Bereitstellung des API-Gateways
 
-Unsere API ist aus technischer Sicht nun fertig. Allerdings kann sie nach wie vor nicht von aussen - z.B. via Mobile- oder Web-App - aufgerufen werden. Es fehlt noch die Bereitsstellung als Stage. Aber auch das ist kein Hexenwerk: 
+Unsere API ist aus technischer Sicht nun fertig. Allerdings kann sie nach wie vor nicht von aussen - z.B. via Mobile- oder Web-App - aufgerufen werden. Es fehlt noch die Bereitstellung als Stage. Aber auch das ist kein Hexenwerk: 
 
-* Aktion > Bereitstsellen der API
+* Aktion > Bereitstellen der API
 * Bereitstellungsstufe: [NEUE STUFE]
 	* Stufenname: SW-STAGE
 	* Beschreibung der Stufe: Serverless Workshop Stage
 	* Beschreibung der Bereitstellung: v0.1
 
-> *Hinweis*: Eine Bereitsstellung als STAGE ist erst dann möglich, wenn allen Ressourcen / Methoden entsprechende Integrationen (Serverless Functiosn) zugeordnet wurden. Um Fehlermeldungen zu umgehen, kann die Integration vorrübergehend als MOCK angegeben werden. 
+> *Hinweis*: Eine Bereitstellung als STAGE ist erst dann möglich, wenn allen Ressourcen / Methoden entsprechende Integrationen (Serverless Functions) zugeordnet wurden. Um Fehlermeldungen zu umgehen, kann die Integration vorübergehend als MOCK angegeben werden. 
 
-Abbildung 04 zeigt die bereitgestellte Stage inkl. der von Aussen aufrufbaren URL. 
+Abbildung 04 zeigt die bereitgestellte Stage inklusive der von Aussen aufrufbaren URL. 
 
 ![Order Processing](./images/04_06_staging.png)
 Abbildung 04: *OMS API Gateway STAGE*
@@ -417,7 +419,7 @@ Bleibt uns nur noch, unsere Order Management API von aussen zu testen. Dies kann
 
 
 ![Order Processing](./images/04_07_successful_order.png)
-Abbildung 05: *Erfolgereiche Bestellung via API Gateway*
+Abbildung 05: *Erfolgreiche Bestellung via API Gateway*
 
 > **POSTMAN**: Für Freunde von POSTMAN liegt eine entsprechende API-Call Collection im Verzeichnis /04\_api\_gateway/postman bereit. 
  
@@ -426,7 +428,7 @@ Abbildung 05: *Erfolgereiche Bestellung via API Gateway*
 ### Diskutierenswert ... 
 
 Frage an dich selbst: 
-> Wie können über unser API Gateway Umgebungen wie DEVELOPMENT, TESTING und PRODUCTION voneinander getrennt werden? 
+> Wie können über unser API-Gateway Umgebungen wie DEVELOPMENT, TESTING und PRODUCTION voneinander getrennt werden? 
 
 Frage an dich selbst: 
 > Wie lassen sich Security Attacken, wie z.B. DDoS- und DoS-Angriffe, vermeiden?

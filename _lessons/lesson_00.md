@@ -4,7 +4,7 @@
 Bevor wir mit dem Serverless-Workshop und den Workshop-Übungen beginnen, gilt 
 es zunächst unser Cloud-Environment vorzubereiten. 
 
-Zu diesem Zweck erstellen wir mit Hilfe eines [CloudFormation](https://aws.amazon.com/de/cloudformation/)-Templates gemeinsam die für unseren Workshop notwendigen Cloud-Komponenten. 
+Zu diesem Zweck erstellen wir mithilfe eines [CloudFormation](https://aws.amazon.com/de/cloudformation/)-Templates gemeinsam die für unseren Workshop notwendigen Cloud-Komponenten. 
 
 > **Infrastructure as Code**: Für das Anlegen der gewünschten Cloud-Komponenten nutzen wir ein "Zielbild", welches in einem IaC Template hinterlegt ist. 
 
@@ -62,7 +62,7 @@ geben.
 
 ### Schritt 3: Tabellen initial füllen 
 
-Mit Hilfe von CloudFormation lassen sich zwar die benötigten Ressourcen erstellen, deren anschließende Initialisierung - falls notwendig - ist aber mittels CloudFormation alles andere als trivial. 
+Mithilfe von CloudFormation lassen sich zwar die benötigten Ressourcen erstellen, deren anschließende Initialisierung - falls notwendig - ist aber mittels CloudFormation alles andere als trivial. 
 
 Wir nutzen daher einen kleinen Trick und werden die Initialisierung via Serverless Function vornehmen. Schließlich ist dies ja ein Serverless Workshop ;-) 
 

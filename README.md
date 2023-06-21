@@ -25,7 +25,7 @@ Goto the lambda layers directory
 
 and call the maven install command. Use _./mwnw_ for the provided maven wrapper or _mvn_ for your local maven version: 
 
-	./mwnw clean install
+	./mwnw clean install -DskipTests=true
 
 ### Step 2: Package example projects
 
@@ -35,7 +35,7 @@ After having installed the lambda layer, go back to the main directory of the wo
 
 and call the maven package command for the whole project: 
 
-	./mwnw clean package 
+	./mwnw clean package -DskipTests=true
 
 This command will download all the remaining 3rd party libraries and compile and package our examples. 
 
