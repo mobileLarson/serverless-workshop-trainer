@@ -47,7 +47,6 @@ public class OrderHandler implements RequestHandler<OrderRequest, OrderResponse>
                 ReadOrderHandler readOrderHandler = new ReadOrderHandler();
                 return new OrderResponse(readOrderHandler.handleRequest(readOrderRequest, context));
             case UPDATE:
-                // TODO
                 // - "convert" OrderRequest to UpdateOrderRequest
                 // - handle "converted" request with corresponding Request Handler for update request
                 // - "convert" specific order response for update request to neutral response

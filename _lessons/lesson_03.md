@@ -102,7 +102,7 @@ Dieses gilt es herauszufiltern und dem Prozess zur Verfügung zu stellen. Dazu i
 
 Im Anschluss einfach auf "Next" klicken, um so in den nächsten Schritt (Step 3: Review generated code) des Step Function Wizard zu gelangen. Auf der dann erscheinenden Seite erneut 
 
-* Next 
+* Create  
 
 klicken, um so auf die Seite zur Konfiguration der Step Function zu gelangen (Step 4: Specify state machine settings). 
 

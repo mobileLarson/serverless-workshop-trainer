@@ -1,0 +1,11 @@
+Resources:
+  Function:
+    Type: AWS::Serverless::Function
+    Properties:
+      Timeout: 300
+      MemorySize: 1152
+      Handler: de.openknowledge.workshop.serverless.oms.lambda.OrderHandler
+      CodeUri: /Volumes/work/ok-community/training/cloud/serverless/serverless-coffee/serverless-workshop-trainer/05_testing/acceptance-testing
+      Runtime: java11
+      Architectures:
+        - arm64

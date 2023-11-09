@@ -1,25 +1,27 @@
+/*
+ * Copyright (C) open knowledge GmbH
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions
+ * and limitations under the License.
+ */
 package de.openknowledge.workshop.cloud.serverless.lambda;
 
-import com.amazonaws.services.lambda.runtime.Context;
+import com.amazonaws.services.lambda.runtime.RequestHandler;
+import de.openknowledge.workshop.cloud.serverless.model.GreetingRequest;
+import de.openknowledge.workshop.cloud.serverless.model.GreetingResponse;
 
 /**
- * AWS Lambda greeting handler.
- *
- * Converts a string based input name into a corresponding greeting
- * with the help of an AWS lambda function.
+ * AWS lambda handler interface
  */
-// de.openknowledge.workshop.cloud.serverless.lambda.GreetingHandler::greet
-public class GreetingHandler {
+public interface GreetingHandler extends RequestHandler<GreetingRequest, GreetingResponse> {
 
-    /**
-     * Converts a string based input name into a
-     * corresponding greeting.
-     *
-     * @param name string based input name
-     * @param context AWS lambda context
-     * @return greeting, generated for input name
-     */
-    public String greet(String name, Context context) {
-        return String.format("Hello, %s", name);
-    }
 }

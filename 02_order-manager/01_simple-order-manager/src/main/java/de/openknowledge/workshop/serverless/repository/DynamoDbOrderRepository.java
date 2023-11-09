@@ -46,7 +46,6 @@ public class DynamoDbOrderRepository  {
         // mapping of pk and sk
         itemValues.put(COL_ORDER_ID, AttributeValue.builder().s(order.getOrderId()).build());
 
-        // TODO
         // - add map entries for remaining order attributes
         // - CAUTION: order no is a LONG value
         itemValues.put(COL_ORDER_NO, AttributeValue.builder().n(order.getOrderNo().toString()).build());
@@ -54,7 +53,6 @@ public class DynamoDbOrderRepository  {
         itemValues.put(COL_USER_ID, AttributeValue.builder().s(order.getUserId()).build());
         itemValues.put(COL_ORDER_STATE, AttributeValue.builder().s(order.getOrderStatus()).build());
 
-        // TODO
         // build PutItemRequest object with the help of builder()-pattern
         // DON'T FORGET to call build() ;-)
         // - table name

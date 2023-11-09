@@ -53,7 +53,7 @@ public class OrderHandler implements RequestHandler<OrderRequest, OrderResponse>
         if (isAuditEnabled)
             auditRequest(orderRequest, context);
 
-        // TODO implement business logic for ordering a coffee
+        // business logic for ordering a coffee
         //    1. extract values from order request (make sure request is valid)
         //    2. call order service
         //    3. return info about created order

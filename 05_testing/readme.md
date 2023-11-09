@@ -132,7 +132,7 @@ Start via Docker:
 
 Start via Docker-Compose:
 
-    docker run -p 8000:8000 amazon/dynamodb-local
+    docker compose up [-d]
 
 
 Credentials must be set:

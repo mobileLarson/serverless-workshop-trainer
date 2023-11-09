@@ -1,1 +1,1 @@
-$.isCapacityAvailable.Execustion[10] is present
+$.isCapacityAvailable.Execution[10]

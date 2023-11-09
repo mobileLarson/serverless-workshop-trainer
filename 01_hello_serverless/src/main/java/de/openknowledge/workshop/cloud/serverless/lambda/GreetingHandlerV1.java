@@ -47,7 +47,6 @@ public class GreetingHandlerV1 implements RequestHandler<GreetingRequest, Greeti
         logger.log("Max mem allocated: " + context.getMemoryLimitInMB());
         logger.log("Time remaining in milliseconds: " + context.getRemainingTimeInMillis());
 
-
         String firstName = name.getFirstName();
         String lastName = name.getLastName();
 

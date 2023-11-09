@@ -7,7 +7,10 @@ import de.openknowledge.workshop.serverless.oms.model.Order;
  */
 public class OrderRequest {
 
+    // action to perform
     private String action;
+
+    // order to perform requested action with
     private Order order;
 
     public OrderRequest() {

@@ -9,9 +9,6 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.condition.DisabledIf;
-import software.amazon.awssdk.services.dynamodb.endpoints.internal.Value;
-
-import java.util.UUID;
 
 @TestMethodOrder(OrderAnnotation.class)
 @DisplayName("Tests for Order Service CRUD methods.")

@@ -59,7 +59,7 @@ public class DynamoDBEnhancedOrderRepository implements OrderRepository {
      * @param order
      */
     public Order updateOrder(Order order) {
-        // TODO see in optionalUpdateItemInTable(...)
+        // see in optionalUpdateItemInTable(...)
         return optionalUpdateItemInTable(DDB_ENH_CLIENT, order);
     }
 
@@ -121,9 +121,9 @@ public class DynamoDBEnhancedOrderRepository implements OrderRepository {
 
         try {
 
-            Map<String, AttributeValue> expressionValues = Map.of(
+            /*Map<String, AttributeValue> expressionValues = Map.of(
                     ":min_value", numberValue(1),
-                    ":max_value", numberValue(100));
+                    ":max_value", numberValue(100));*/
 
             ScanEnhancedRequest request = ScanEnhancedRequest.builder()
                     .consistentRead(true)
@@ -225,8 +225,6 @@ public class DynamoDBEnhancedOrderRepository implements OrderRepository {
 
         // read / merge / update
         try {
-
-            // TODO
             // - read current version of order via getItemFromTable
             // - merge current version and  order with updates given by method parameter
             // - return updated order

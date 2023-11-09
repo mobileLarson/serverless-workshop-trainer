@@ -27,7 +27,7 @@ import static de.openknowledge.workshop.cloud.serverless.util.LambdaEnvironment.
  * AWS lambda creating a greeting with the help of a given event
  */
 // de.openknowledge.workshop.cloud.serverless.lambda.GreetingHandlerV3::handleRequest
-public class GreetingHandlerV3 implements GreetingRequestHandler {
+public class GreetingHandlerV3 implements GreetingHandler {
 
     private final static String LOG_CONTEXT = "logContext";
 

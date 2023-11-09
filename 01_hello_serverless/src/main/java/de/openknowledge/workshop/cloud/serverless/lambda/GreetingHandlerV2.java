@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
  * AWS lambda creating a greeting with the help of a given event
  */
 // de.openknowledge.workshop.cloud.serverless.lambda.GreetingHandlerV2::handleRequest
-public class GreetingHandlerV2 implements GreetingRequestHandler {
+public class GreetingHandlerV2 implements GreetingHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(GreetingHandlerV2.class);
 

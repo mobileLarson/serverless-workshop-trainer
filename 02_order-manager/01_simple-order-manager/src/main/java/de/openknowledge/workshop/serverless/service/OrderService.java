@@ -33,7 +33,6 @@ public class OrderService {
     private static final Logger logger = LoggerFactory.getLogger(OrderService.class);
     private static final DynamoDbOrderRepository repository = new DynamoDbOrderRepository();
 
-
     /**
      * Generates order with the help of
      *
@@ -49,16 +48,14 @@ public class OrderService {
         order.setDrink(drink);
         order.setUserId(userId);
 
-        // TODO
         // set missing values for order to create
         // - orderId : unique order id via private method
         // - orderNo : next available order no via via private method
         // - orderStatus: order confirmed state via OrderStatus
-        order.setOrderId(generateUniqueOrderId());                // TODO remove
-        order.setOrderNo(nextAvailableOrderNo());                 // TODO remove
-        order.setOrderStatus(OrderStatus.CONFIRMED.getStatus());  // TODO remove
+        order.setOrderId(generateUniqueOrderId());
+        order.setOrderNo(nextAvailableOrderNo());
+        order.setOrderStatus(OrderStatus.CONFIRMED.getStatus());
 
-        // TODO
         // - store order via repository
         repository.storeOrder(order);
 
