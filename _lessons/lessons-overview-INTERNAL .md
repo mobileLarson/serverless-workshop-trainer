@@ -9,11 +9,19 @@ Was wollen wir heute machen und lernen?
 Wie gehen wir dabei vor? 
 > Die verschiedenen Übungen kurz skizzieren. 
 
+
 ### 00: Setup & Workshop Einführung
 *	IAM vs Stammbenutzer
 *	durch die AWS Konsole navigieren
 *	CloudFormation erklären und einspielen
 	* 	best practiceses: Naming / Prefix 
+
+Account-Info: 
+> - Account: 460357271599 / serverless-workshop
+> - Stammbenutzer: lars.roewekamp@openknowledge.de
+> - Working Region: eu-central-1 (Frankfurt)
+> - Demo Region: us-east-1 (Nord Verginia)
+
 
 ### 01: Hello Serverless
 *	My First Lambda

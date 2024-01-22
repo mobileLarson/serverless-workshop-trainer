@@ -114,7 +114,13 @@ Falls du die AWS-CLI installiert und lokal entsprechende Credentials hinterlegt 
 
 * TestUpdateOrder
 
-testen. Alternativ kannst du das OrderManagement-Artefakt auch in die AWS-Cloud hochladen und dort die Serverless Function des Order Handlers mit den folgenden zwei Test-Events ausführen: 
+testen. 
+
+Alternativ kannst du das OrderManagement-Artefakt auch in die AWS-Cloud hochladen und dort die Serverless Function des Order Handlers mit den zwei Test-Events aus dem Verzeichniss 
+
+	/02_order-manager/02_advanced-order-manager
+
+ausführen : 
 
 Test-Event 1: "Neue Order erstellen": 
 
@@ -326,6 +332,8 @@ Lesen aller Bestellungen, die einem bestimmten Filterkriterium entsprechen (via 
 }
 ```
 
+Info: 
+> In der aktuellen Implementierung werden die angegeben Filter ignoriert. Der Call ohne orderId kann aber verwendet werden, um alle Bestellungen zu lesen. 
 
 Test-Event für **oms-update-order**: 
 
@@ -345,8 +353,7 @@ Test-Event für **oms-delete-order**:
 }
 ```
 
-Ob die Tests funktioniert haben oder nicht kannst du entweder direkt am Output erkennen oder aber durch einen Blick in die DynamoDB Datenbank. 
-
+Ob die Tests deiner AWS Lambda Funktionen funktioniert haben oder nicht kannst du entweder direkt am Output erkennen oder aber durch einen Blick in die DynamoDB Datenbank. 
 
 ### Diskutierenswert ... 
 

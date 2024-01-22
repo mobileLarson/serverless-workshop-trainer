@@ -6,7 +6,7 @@ Im bisherigen Verlauf des Workshops haben wir uns aus fachlicher Sicht hauptsäc
 
 Wir haben in dem Zuge verschiedene Beste Practices für Serverless Functions und deren Zusammenspiel mit anderen Cloud-Komponenten kennengelernt. 
 
-In dieser Übung wollen wir uns nun Serverless Workflows - aka [Step Functions](https://docs.aws.amazon.com/step-functions/latest/dg/welcome.html) - anschauen. Step Functions bieten, anders als Serverless Functions, die Möglichkeit, langlaufende Prozesse abzubilden. 
+In dieser Übung wollen wir uns nun den Serverless Workflows - aka [Step Functions](https://docs.aws.amazon.com/step-functions/latest/dg/welcome.html) - widmen. Step Functions bieten, anders als Serverless Functions, die Möglichkeit, langlaufende Prozesse abzubilden. 
 
 Kosten fallen dabei nicht, wie von den Serverless Functions gewohnt, für die Dauer des Prozesses an, sondern lediglich für die Anzahl der Prozessschritte bzw. deren Übergänge. Das macht State Functions durchaus auch für Szenarien interessant, in denen man normalerweise an eine Realisierung via Serverless Functions denken würde. 
 
@@ -60,7 +60,7 @@ Abbildung 03: *Leerer Order Processing Workflow*
 
 ### Schritt 1: "Trigger Workflow"
 
-Zunächst einmal gilt es den Einstiegspunkt für den Prozess festzulegen. Dazu ziehen wir ein Flow-Element vom Typ _Pass_ Typ in unseren Workflow. 
+Zunächst einmal gilt es den Einstiegspunkt für den Prozess festzulegen. Dazu ziehen wir ein Flow-Element vom Typ _Pass_ in unseren Workflow. 
 
 * Flow: Pass
 
@@ -78,7 +78,7 @@ Angetriggert wird unser Workflow durch ein OrderCreated Event des AWS Event-Hand
 }
 ```
 
-> **TIPP**: Wenn dich der konkrete Aufbau eines EventBridge Events interessiert, dann auch dir die entsprechende [Dokumentation](https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-events-structure.html) an. 
+> **TIPP**: Wenn dich der konkrete Aufbau eines EventBridge Events interessiert, dann schau dir am besten die entsprechende [Dokumentation](https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-events-structure.html) an. 
 
 Dieses gilt es herauszufiltern und dem Prozess zur Verfügung zu stellen. Dazu ist im Tab "Input" des Pass-Elements folgende Einstellung notwendig: 
 
@@ -106,7 +106,7 @@ Im Anschluss einfach auf "Next" klicken, um so in den nächsten Schritt (Step 3:
 
 klicken, um so auf die Seite zur Konfiguration der Step Function zu gelangen (Step 4: Specify state machine settings). 
 
-Im Rahmen der Konfiguration gilt es eine IAM Rolle für den Prozess anzugeben, welche alle dafür notwendigen Berechtigungen für die innerhalb des Workflows auszuübenden Operationen besitzt. Greift der Workflow, wie in unserem Falle auf eine DynamoDB oder den Event Handler zu, muss die Rolle entsprechende Rechte zum lesenden und/oder schreibenden Zugriff auf diese Cloud-Komponenten besitzen. Zum Glück haben wie genau eine solche Rolle bei unserem initialen Setup bereits mit angelegt: 
+Im Rahmen der Konfiguration gilt es eine IAM Rolle für den Prozess anzugeben, welche alle notwendigen Berechtigungen für die innerhalb des Workflows auszuübenden Operationen besitzt. Greift der Workflow, wie in unserem Falle auf eine DynamoDB oder den Event Bus EventBridge zu, muss die Rolle entsprechende Rechte zum lesenden und/oder schreibenden Zugriff auf diese Cloud-Komponenten besitzen. Zum Glück haben wie genau eine solche Rolle bei unserem initialen Setup bereits mit angelegt: 
 
 * Permissions
 	* Choose an existing role
@@ -381,7 +381,7 @@ Abbildung 07: *Awaiting order completion*
 
 #### Testing "Awaiting order completion"
 
-Für den Test unseres aktuellen Order Processing Workflow müssen wir aufgrund der Callback-Funktion etwas anders vorgehen! 
+Für den Test unseres aktuellen Order Processing Workflow müssen wir aufgrund der Callback-Funktion etwas anders vorgehen als bisher gewohnt!  
 
 > *Tipp*: Erst die Beschreibung des Testablaufs durchlesen und dann mit dem Testing beginnen. 
 

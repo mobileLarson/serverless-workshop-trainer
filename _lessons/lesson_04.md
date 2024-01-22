@@ -217,6 +217,11 @@ In das unter _Inhaltstyp_ stehende Eingabefenster folgendes Mapping eintragen un
 }
 ```
 
+Der gezeigte Code extrahiert den Wert des Path-Parameter *orderId* aus der URI und fügt einen gleichnamigen Parameter in die Payload des Events.  
+
+Tip
+> FÜr den DELETE Call kann exakt so vorgegangen werden, wie für den eben gezeigten GET Call. 
+
 Wenn wir jetzt die beiden Methoden erneut testen, können wir die Payload leer lassen. In der Ausgabe finden wir im Anschluss u.a. die folgenden Informationen zu der erfolgten automatischen Transformation: 
 
 ```
@@ -305,7 +310,7 @@ Die Lambda-Funktion wirft in diesem Fall eine IllegalArgumentException inklusive
 
 * "Missing attributes (userId and/or drink)"
 
-Dei Serverless Function wrappt das Ganze in einer LambdaException welche für den folgenden Output sorgt: 
+Die Serverless Function wrappt das Ganze in einer LambdaException welche für den folgenden Output sorgt: 
 
 ```
 {
@@ -359,7 +364,7 @@ Abbildung 05 zeigt das Ergebnis der eben beschriebenen Schritte.
 Abbildung 05: *GET /orders/{orderId} mit automatischen Mapping*
 
 
-Es git übrigens, dass zunächst die spezielleren Lambda-Fehler RegEx greifen, bevor am Ende die Default-Variante gewählt wird. In unserem Fall heist das, dass wir für fehlende Attribute weiterhin, wie gewünscht, den Status Code 422 bekommen und alle anderen Fehler mit einem 400 beantwortet werden. 
+Wann greift welche Regel? Es gilt, dass zunächst die spezielleren Lambda-Fehler RegEx greifen, bevor am Ende die Default-Variante zum Zuge kommt. In unserem Fall heist das, dass wir für fehlende Attribute weiterhin, wie gewünscht, den Status Code 422 bekommen und alle anderen Fehler mit einem 400 beantwortet werden. 
 
 #### Aufgaben
 
@@ -370,12 +375,18 @@ auf den Server-Response, die Payload etc. zur Verfügung stehen, findest du unte
 
 **Aufgabe 1:**
 
-Sorge dafür, dass auch bei den Methoden 
+Sorge dafür dass bei einem erfolgreichen Löschen einer Order via 
+
+* DELETE 
+
+anstelle von 200 OK der spezifischere Code 204 NO CONTENT zurückgegeben wird. 
+
+Sorge zusätzlich dafür, dass bei den beiden Methoden 
 
 * PUT 
 * DELETE 
 
-der Status-Code 422 zurückgeben wird, wenn eines der erwarteten Attribute fehlt. Theoretisch kann dies nicht der Fall sein, da das einzige Pflichtattribut bei beiden Methoden _orderId_ ist und wir diese bereits in der vorherigen Übung durch automatisches Mapping aus dem URL-Pfad in die Payload gepackt haben - aber man weiß ja nie ;-) 
+für eine bereits bestehende Bestellung der Status-Code 422 zurückgeben wird, wenn eines der erwarteten Attribute fehlt. Theoretisch kann dies nicht der Fall sein, da das einzige Pflichtattribut bei beiden Methoden _orderId_ ist und wir diese bereits in der vorherigen Übung durch automatisches Mapping aus dem URL-Pfad in die Payload gepackt haben - aber man weiß ja nie ;-) 
 
 **Aufgabe 2:**
 

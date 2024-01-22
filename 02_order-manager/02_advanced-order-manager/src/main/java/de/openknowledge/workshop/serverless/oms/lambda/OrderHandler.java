@@ -71,10 +71,6 @@ public class OrderHandler implements RequestHandler<OrderRequest, OrderResponse>
      */
     private static OrderAction getOrderAction(String action) {
         Optional<OrderAction> orderAction = OrderAction.get(action);
-        if (orderAction.isPresent()) {
-            return orderAction.get();
-        } else {
-            return OrderAction.UNKNOWN;
-        }
+        return orderAction.orElse(OrderAction.UNKNOWN);
     }
 }

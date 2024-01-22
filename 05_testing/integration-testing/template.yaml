@@ -11,6 +11,8 @@ Globals:
     Timeout: 20
 
 Resources:
+  # Greeting Function declaration
+  # - simple Event Trigger (JSON)
   Greetings:
     Type: AWS::Serverless::Function
     Properties:
@@ -22,6 +24,8 @@ Resources:
         Variables:
           ENVIRONMENT: "test"
 
+  # GreetingViaAPI Function declaration
+  # - simulate API Trigger
   GreetingsViaApi:
     Type: AWS::Serverless::Function
     Properties:
