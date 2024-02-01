@@ -1,0 +1,47 @@
+[
+  {
+    "PK": "menu",
+    "entries": [
+      {
+        "available": true,
+        "icon": "barista-icons_espresso-alternative",
+        "modifiers": [],
+        "drink": "Espresso"
+      },
+      {
+        "available": true,
+        "icon": "barista-icons_cappuccino-alternative",
+        "modifiers": [],
+        "drink": "Cappuccino"
+      },
+      {
+        "available": true,
+        "icon": "barista-icons_cafe-latte",
+        "modifiers": [],
+        "drink": "Latte"
+      },
+      {
+        "available": true,
+        "icon": "barista-icons_flat-white-alternative@2x",
+        "modifiers": [],
+        "drink": "Flat White"
+      },
+      {
+        "available": true,
+        "icon": "barista-icons_americano",
+        "modifiers": [],
+        "drink": "Americano"
+      },
+      {
+        "available": true,
+        "icon": "barista-icons_americano",
+        "modifiers": [],
+        "drink": "Coffee of the day"
+      }
+    ]
+  },
+  {
+    "PK": "config",
+    "open": true
+  }
+]
