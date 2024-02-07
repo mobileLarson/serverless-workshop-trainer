@@ -60,10 +60,10 @@ public class DynamoDbOrderRepository implements OrderRepository {
         } catch (ResourceNotFoundException e) {
             logger.error(String.format("Error: The Amazon DynamoDB table \"%s\" can't be found.", ORDER_TABLE_NAME));
             logger.error("Be sure that it exists and that you've typed its name correctly!");
-            // TODO some useful ex handling ;-)
+            throw new IllegalStateException("DynamoDB connection not established", e.getCause());
         } catch (DynamoDbException e) {
             logger.error(String.format("Error: %s", e.getMessage()));
-            // TODO some useful ex handling ;-)
+            throw new IllegalStateException("DynamoDB connection not established", e.getCause());
         }
     }
 
@@ -100,12 +100,10 @@ public class DynamoDbOrderRepository implements OrderRepository {
         } catch (ResourceNotFoundException e) {
             logger.error(String.format("Error: The Amazon DynamoDB table \"%s\" can't be found.", ORDER_TABLE_NAME));
             logger.error("Be sure that it exists and that you've typed its name correctly!");
-            // TODO some useful ex handling ;-)
-            return null;
+            throw new IllegalStateException("DynamoDB connection not established", e.getCause());
         } catch (DynamoDbException e) {
             logger.error(String.format("Error: %s", e.getMessage()));
-            // TODO some useful ex handling ;-)
-            return null;
+            throw new IllegalStateException("DynamoDB connection not established", e.getCause());
         }
     }
 
@@ -144,12 +142,10 @@ public class DynamoDbOrderRepository implements OrderRepository {
         } catch (ResourceNotFoundException e) {
             logger.error(String.format("Error: The Amazon DynamoDB table \"%s\" can't be found.", ORDER_TABLE_NAME));
             logger.error("Be sure that it exists and that you've typed its name correctly!");
-            // TODO some useful ex handling ;-)
-            return null;
+            throw new IllegalStateException("DynamoDB connection not established", e.getCause());
         } catch (DynamoDbException e) {
             logger.error(String.format("Error: %s", e.getMessage()));
-            // TODO some useful ex handling ;-)
-            return null;
+            throw new IllegalStateException("DynamoDB connection not established", e.getCause());
         }
     }
 
@@ -186,10 +182,10 @@ public class DynamoDbOrderRepository implements OrderRepository {
         } catch (ResourceNotFoundException e) {
             logger.error(String.format("Error: The Amazon DynamoDB table \"%s\" can't be found.", ORDER_TABLE_NAME));
             logger.error("Be sure that it exists and that you've typed its name correctly!");
-            // TODO some useful ex handling ;-)
+            throw new IllegalStateException("DynamoDB connection not established", e.getCause());
         } catch (DynamoDbException e) {
             logger.error(String.format("Error: %s", e.getMessage()));
-            // TODO some useful ex handling ;-)
+            throw new IllegalStateException("DynamoDB connection not established", e.getCause());
         }
     }
 

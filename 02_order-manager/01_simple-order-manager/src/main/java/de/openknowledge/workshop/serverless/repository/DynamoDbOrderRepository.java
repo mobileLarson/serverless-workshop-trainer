@@ -82,9 +82,11 @@ public class DynamoDbOrderRepository  {
             logger.error(String.format("Error: The Amazon DynamoDB table \"%s\" can't be found.", ORDER_TABLE_NAME));
             logger.error("Be sure that it exists and that you've typed its name correctly!");
             // WOULD BE NICE to have some useful ex handling ;-)
+            throw new IllegalStateException("DynamoDB connection not established", e.getCause());
         } catch (DynamoDbException e) {
             logger.error(String.format("Error: %s", e.getMessage()));
             // WOULD BE NICE to have some useful ex handling ;-)
+            throw new IllegalStateException("DynamoDB connection not established", e.getCause());
         }
     }
 

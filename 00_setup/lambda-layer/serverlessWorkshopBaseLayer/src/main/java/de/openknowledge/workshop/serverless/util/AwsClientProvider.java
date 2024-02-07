@@ -8,18 +8,9 @@ import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 import software.amazon.awssdk.services.eventbridge.EventBridgeClient;
 
+import static de.openknowledge.workshop.serverless.util.AwsRegionProvider.getDefaultRegion;
+
 public class AwsClientProvider {
-
-    // region to use: e.g. Frankfurt == EU_CENTRAL_1, LONDON == EU_WEST_2
-    // for "your" region" see https://docs.aws.amazon.com/de_de/AWSEC2/latest/UserGuide/using-regions-availability-zones.html
-
-    // TODO: adjust region to "your" default region
-    private static Region DEFAULT_REGION = Region.EU_CENTRAL_1;
-
-    // Some AWS services don't have Region specific endpoints. When using those services,
-    // you must set the Region as Region.AWS_GLOBAL or Region.AWS_CN_GLOBAL.
-    private static Region GLOBAL_REGION = Region.AWS_GLOBAL;
-
 
     /**
      * Builds an enhanced AWS dynamoDb client using the "default" region and
@@ -61,7 +52,7 @@ public class AwsClientProvider {
      */
     public static DynamoDbClient getDynamoDbClient() {
         return DynamoDbClient.builder()
-                .region(DEFAULT_REGION)
+                .region(getDefaultRegion())
                 .build();
     }
 
@@ -80,7 +71,7 @@ public class AwsClientProvider {
 
         return DynamoDbClient
                 .builder()
-                .region(DEFAULT_REGION)
+                .region(getDefaultRegion())
                 .credentialsProvider(credentialsProvider)
                 .build();
     }
@@ -91,7 +82,7 @@ public class AwsClientProvider {
      */
     public static EventBridgeClient getEventBridgeClientClient() {
         return EventBridgeClient.builder()
-                .region(DEFAULT_REGION)
+                .region(getDefaultRegion())
                 .build();
     }
 
@@ -108,7 +99,7 @@ public class AwsClientProvider {
 
         return EventBridgeClient
                 .builder()
-                .region(DEFAULT_REGION)
+                .region(getDefaultRegion())
                 .credentialsProvider(credentialsProvider)
                 .build();
     }

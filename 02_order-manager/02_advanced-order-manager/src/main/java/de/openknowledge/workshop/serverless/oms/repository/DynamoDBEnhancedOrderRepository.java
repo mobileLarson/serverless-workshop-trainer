@@ -168,6 +168,7 @@ public class DynamoDBEnhancedOrderRepository implements OrderRepository {
             logger.info(String.format("%s: item removed (%s)", ORDER_TABLE_NAME, pk));
         } catch (DynamoDbException ex) {
             logger.info(String.format("%s: error while removing item (%s)", ORDER_TABLE_NAME, pk));
+            throw new IllegalStateException("DynamoDB connection not established", ex.getCause());
         }
     }
 
@@ -190,6 +191,7 @@ public class DynamoDBEnhancedOrderRepository implements OrderRepository {
             logger.info(String.format("%s: item put (%s | %d)", ORDER_TABLE_NAME, pk, orderNo));
         } catch (DynamoDbException ex) {
             logger.error(String.format("Error while %s putting item (%s | %d)", ORDER_TABLE_NAME, pk, orderNo));
+            throw new IllegalStateException("DynamoDB connection not established", ex.getCause());
         }
     }
 
@@ -209,6 +211,7 @@ public class DynamoDBEnhancedOrderRepository implements OrderRepository {
             logger.info(String.format("%s: item updated (%s))", ORDER_TABLE_NAME, pk));
         } catch (DynamoDbException ex) {
             logger.error(String.format("Error while %s updating item (%s)", ORDER_TABLE_NAME, pk));
+            throw new IllegalStateException("DynamoDB connection not established", ex.getCause());
         }
 
         return updatedOrder;
@@ -236,6 +239,7 @@ public class DynamoDBEnhancedOrderRepository implements OrderRepository {
             logger.info(String.format("%s: item updated (%s))", ORDER_TABLE_NAME, pk));
         } catch (DynamoDbException ex) {
             logger.error(String.format("Error while %s updating item (%s)", ORDER_TABLE_NAME, pk));
+            throw new IllegalStateException("DynamoDB connection not established", ex.getCause());
         }
         return updatedOrder;
     }
